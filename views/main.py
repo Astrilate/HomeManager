@@ -3,17 +3,21 @@ from models import db, Item, User
 from . import main
 
 
-# 测试
+# 启动测试
 @main.route('/')
 def hello():
     return "hello"
 
 
-# 首页
+# 登录注册首页
+@main.route('/index')
+def index():
+    return render_template('index.html')
+
+
 @main.route('/home')
 def home():
-    items = Item.query.all()  # 查询所有物品
-    return render_template('index.html', items=items)
+    return "this is home"
 
 
 # 初始化数据库接口

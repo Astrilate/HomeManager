@@ -17,7 +17,7 @@ body {
     background: #fff;
     padding: 50px; /* 增加内边距，让框变大 */
     border-radius: 20px; /* 使边角更圆滑 */
-    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2); /* 增加更明显的阴影效果 */
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25); /* 增加更明显的阴影效果 */
     width: 400px; /* 增大宽度 */
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -25,7 +25,7 @@ body {
 /* 鼠标经过时，浮起效果 */
 .form-container:hover {
     transform: translateY(-15px); /* 浮动效果加大 */
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3); /* 阴影加深，显得更立体 */
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5); /* 阴影加深，显得更立体 */
 }
 
 /* 标题样式 */
@@ -91,10 +91,18 @@ h2 {
     font-size: 14px;
 }
 
-/* 错误消息的样式 */
-.error {
-    color: red;
-    font-size: 14px;
+/* 成功消息样式 */
+.success {
+    color: green;  /* 绿色字体 */
+    font-size: 20px;
     text-align: center;
-    margin-top: 10px;
+    margin-top: 20px;
+}
+
+/* 错误消息样式 */
+.error {
+    color: red;  /* 红色字体 */
+    font-size: 20px;
+    text-align: center;
+    margin-top: 20px;
 }

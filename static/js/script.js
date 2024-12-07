@@ -37,7 +37,7 @@ function toggleAuthView() {
 
 // 登录与注册视图切换
 function switchToLoginView() {
-    formTitleText.textContent = '登录';  // 只修改文本
+    formTitleText.textContent = '登录';
     submitButton.textContent = '登录';
     toggleLink.textContent = '没有账号？点击这里注册';
 
@@ -47,7 +47,7 @@ function switchToLoginView() {
 }
 
 function switchToRegisterView() {
-    formTitleText.textContent = '注册';  // 只修改文本
+    formTitleText.textContent = '注册';
     submitButton.textContent = '注册';
     toggleLink.textContent = '已经有账号？点击这里登录';
 
@@ -67,7 +67,7 @@ function handleFormSubmit(event) {
     const email = isLogin ? null : document.getElementById('email').value;  // 登录时忽略邮箱字段
 
     if (!username || !password || (!isLogin && !email)) {
-        displayErrorMessage('请输入所有必填字段');
+        displayMessage('请输入所有必填字段', 'error');
         return;
     }
 
@@ -89,34 +89,71 @@ function sendRequest(url, method, data) {
         },
         body: JSON.stringify(data)
     })
-    .then(response => response.json())
-    .then(handleResponse)
-    .catch(handleError);
+    .then(function(response) {  // 进行异步的解析
+        response.json()
+            .then(function(jsonData) {
+                // 将是否成功的信息，和解析后的数据传递给 handleResponse
+                handleResponse(response.ok, jsonData);
+            })
+    })
+    .catch(handleError);  // 错误处理
 }
 
 // 响应处理
-function handleResponse(data) {
-    if (data.success) {
-        alert(data.message);
-        window.location.href = '/dashboard';  // 跳转到仪表盘
+function handleResponse(ok=false, data) {
+    if (ok) {
+        // 如果是注册成功，显示消息并切换到登录界面
+        if (!isLogin) {
+            displayMessage('注册成功，请登录', 'success');
+            setTimeout(() => {
+                isLogin = true  // 切换回登录的状态
+                switchToLoginView();  // 2秒后切换到登录界面
+                clearErrorMessage();  // 清除消息
+            }, 2000);
+        }
+
+        // 如果是登录成功，跳转到仪表盘
+        if (isLogin) {
+            displayMessage('登录成功，正在跳转...', 'success');
+            setTimeout(() => {
+                window.location.href = '/home';  // 替换为你实际需要跳转的页面
+            }, 2000);  // 2秒后跳转
+        }
     } else {
-        displayErrorMessage(data.message || '发生错误，请稍后重试');
+        // 显示错误消息
+        displayMessage(data.message || '发生错误，请稍后重试', 'error');
     }
 }
 
 // 错误处理
 function handleError(error) {
     console.error('Error:', error);
-    displayErrorMessage('网络错误，请稍后再试');
+    displayMessage('网络错误，请稍后再试', 'error');
 }
 
-// 错误消息显示与清除
-function displayErrorMessage(message) {
+// 显示消息（成功/失败）
+function displayMessage(message, type) {
     errorMessage.textContent = message;
+
+    // 根据类型选择添加不同的样式
+    if (type === 'success') {
+        errorMessage.classList.remove('error');  // 清除错误样式
+        errorMessage.classList.add('success');   // 添加成功样式
+    } else if (type === 'error') {
+        errorMessage.classList.remove('success');  // 清除成功样式
+        errorMessage.classList.add('error');   // 添加错误样式
+    }
+
+    // 消息显示 2 秒后消失
+    setTimeout(() => {
+        clearErrorMessage();
+    }, 2000);  // 2秒后清除提示信息
 }
 
+// 清除错误消息
 function clearErrorMessage() {
     errorMessage.textContent = '';
+    errorMessage.classList.remove('success', 'error');
 }
 
 // 密码显示切换
