@@ -1,23 +1,100 @@
+/* 全局样式 */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f9f9f9;
-    margin: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f2f2f2;
+    margin: 0;
+    background-image: url('../images/background.jpg'); /* 设置背景图片的 URL */
+    background-size: cover; /* 背景图片覆盖整个屏幕 */
+    background-position: center; /* 背景居中显示 */
 }
 
-h1 {
+/* 表单容器 */
+.form-container {
+    background: #fff;
+    padding: 50px; /* 增加内边距，让框变大 */
+    border-radius: 20px; /* 使边角更圆滑 */
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2); /* 增加更明显的阴影效果 */
+    width: 400px; /* 增大宽度 */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* 鼠标经过时，浮起效果 */
+.form-container:hover {
+    transform: translateY(-15px); /* 浮动效果加大 */
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.3); /* 阴影加深，显得更立体 */
+}
+
+/* 标题样式 */
+h2 {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 28px; /* 调大字体大小 */
     color: #333;
 }
 
-ul {
-    list-style-type: none;
-    padding: 0;
+/* 输入框样式 */
+.input-field {
+    width: 100%;
+    padding: 14px; /* 增大内边距，让输入框更大 */
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 12px; /* 增加圆角 */
+    box-sizing: border-box;
+    font-size: 16px;
 }
 
-li {
-    background-color: #fff;
-    margin: 5px 0;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+/* 密码框容器 */
+.password-container {
+    position: relative;
+}
+
+/* 眼睛图标 */
+#toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    cursor: pointer;
+    color: #aaa;
+}
+
+/* 登录和注册按钮样式 */
+.button {
+    width: 100%;
+    padding: 14px; /* 增加内边距 */
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 12px; /* 增加圆角 */
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+/* 鼠标悬停按钮的效果 */
+.button:hover {
+    background-color: #45a049;
+}
+
+/* 切换登录和注册链接 */
+.toggle-link {
+    display: block;
+    text-align: center;
+    margin-top: 20px; /* 增加间距 */
+    cursor: pointer;
+    color: #4CAF50;
+    font-size: 14px;
+}
+
+/* 错误消息的样式 */
+.error {
+    color: red;
+    font-size: 14px;
+    text-align: center;
+    margin-top: 10px;
 }
