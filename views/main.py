@@ -1,4 +1,4 @@
-from flask import render_template, jsonify
+from flask import render_template, jsonify, request
 from models import db, Item, User
 from . import main
 
@@ -9,23 +9,24 @@ def hello():
     return "hello"
 
 
-# 登录注册首页
-@main.route('/index')
-def index():
-    return render_template('index.html')
-
-
 @main.route('/home')
 def home():
-    return "this is home"
+    return render_template('home.html')
+
+
+@main.route('/load_page', methods=['POST'])
+def load_page():
+    page = request.form.get('page')  # 获取前端传来的页面信息
+    return render_template(f'{page}.html')  # 渲染对应的页面
 
 
 # 初始化数据库接口
-@main.route('/init', methods=['GET'])
-def init_db():
-    # 插入测试数据
-    user1 = User(username="asd", password="asd")
-    db.session.add_all([user1])
-    db.session.commit()
-
-    return jsonify({'message': '成功初始化'}), 201
+@main.route('/calculate', methods=['POST'])
+def calculate():
+    result = {
+        'result1': 666,
+        'result2': 666,
+        'result3': 666,
+        'result4': 666
+    }
+    return jsonify(result), 200

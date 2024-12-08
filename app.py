@@ -4,7 +4,7 @@ from flask_bcrypt import Bcrypt
 from flask_jwt_extended import JWTManager
 
 # 创建 Flask 实例
-app = Flask(__name__)
+app = Flask(__name__, template_folder="templates", static_folder="static")
 # 加载配置
 app.config.from_object('config')
 

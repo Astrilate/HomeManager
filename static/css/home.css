@@ -1,0 +1,167 @@
+/* 全局样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-image: url('../images/background.jpg');  /* 设置背景图片 */
+    background-size: cover;  /* 背景图片覆盖整个页面 */
+    background-position: center;  /* 背景图片居中 */
+    background-attachment: fixed;  /* 背景图片固定在视口 */
+}
+
+/* 顶部栏样式 */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: rgb(76, 175, 80);
+    color: rgb(76, 175, 80);
+    padding: 20px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 22vh;  /* 设置顶部栏的高度 */
+    z-index: 10;
+    border-bottom: 6px solid #dcdcdc;  /* 添加灰色分隔线 */
+}
+
+/* 首页链接部分样式 */
+.home-link {
+    display: flex;
+    flex-direction: column; /* 垂直排列 */
+    justify-content: center;
+    text-align: center;
+    flex: 1;  /* 占顶部栏的左侧三分之一 */
+    text-decoration: none;  /* 去掉默认的链接下划线 */
+    color: white;  /* 保持文字颜色与原来一致 */
+}
+
+/* 大小和字体样式 */
+.home-title-big {
+    font-size: 64px;  /* 放大字体 */
+    font-weight: bold;
+}
+
+.home-title-small {
+    font-size: 24px;  /* 较小的字体 */
+}
+
+/* 按钮容器样式 */
+.top-buttons {
+    display: flex;
+    justify-content: space-between;
+    flex: 1;  /* 占顶部栏的右侧二分之一 */
+    width: 100%;
+}
+
+/* 按钮样式 */
+.top-buttons button {
+    padding: 20px 5px;
+    background-color: #fff;
+    color: rgb(76, 175, 80);
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    flex: 1;  /* 每个按钮占据相等的空间 */
+    margin-left: 20px;
+    font-size: 24px;  /* 放大按钮文字 */
+    transition: background-color 0.2s ease, transform 0.2s ease;  /* 平滑过渡效果 */
+}
+
+/* 按钮悬停效果 */
+.top-buttons button:hover {
+    background-color: #e0e0e0;
+    transform: scale(1.1);  /* 悬停时按钮稍微放大 */
+}
+
+/* 左侧栏样式 */
+.side-bar {
+    position: fixed;
+    top: 22vh;  /* 左侧栏位置从顶部栏下方开始 */
+    left: 0;
+    width: 12.5vw;
+    height: calc(100vh - 22vh);  /* 让左侧栏填满页面剩余的高度 */
+    padding-top: 20px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;  /* 垂直排列 */
+    justify-content: space-between;  /* 均匀分布 */
+    border-right: 6px solid #dcdcdc;  /* 添加灰色分隔线 */
+    background-color: rgb(240, 240, 240);  /* 设置灰色背景 */
+}
+
+/* 左侧栏中的每个框样式 */
+.side-bar .box {
+    width: 90%;
+    padding: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    background-color: rgb(76, 175, 80);
+    color: white;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 20px;
+    height: 70px;  /* 固定框的高度 */
+    overflow: hidden;  /* 如果内容超出，隐藏超出部分 */
+    text-overflow: ellipsis;  /* 如果内容太长，显示省略号 */
+    white-space: nowrap;  /* 防止文本换行 */
+}
+
+/* 请求计算框：去掉边框 */
+#calculateBtn {
+    background-color: rgb(76, 175, 80);
+    cursor: pointer;
+    width: 90px;  /* 设置按钮的宽度 */
+    height: 90px;  /* 设置按钮的高度，保证宽高一致 */
+    border-radius: 50%;  /* 设置圆形 */
+    font-size: 20px;  /* 调整字体大小 */
+    border: none;  /* 去掉按钮边框 */
+    transition: background-color 0.2s ease, transform 0.2s ease;  /* 平滑过渡效果 */
+}
+
+/* 请求计算框的悬停效果 */
+#calculateBtn:hover {
+    background-color: #388E3C;  /* 悬停时背景颜色稍微加深，明显一点 */
+    transform: scale(1.1);  /* 悬停时按钮稍微放大 */
+}
+
+/* 符合框架大小的主内容区域样式，后续子页都可以使用不用再设置 */
+.main-content {
+    margin-left: 13%;  /* 确保主内容不与左侧栏重叠 */
+    margin-top: 22vh;  /* 确保主内容不与顶部栏重叠 */
+    height: 78vh;  /* 设置核心区域的高度 */
+    overflow-y: auto;  /* 使核心区域可以垂直滚动 */
+    padding: 20px;
+}
+
+/* home-content的样式 */
+.home-content {
+    display: flex;
+    justify-content: center;  /* 水平居中 */
+    align-items: center;  /* 垂直居中 */
+    text-align: center;  /* 确保文字居中 */
+    font-size: 64px;  /* 字体大小 */
+    color: #4CAF50;  /* 使用系统主色 */
+    font-weight: bold;  /* 加粗字体 */
+    text-shadow: 3px 3px 6px rgb(0, 0, 0, 0.3);  /* 添加文本阴影，增添立体感 */
+    animation: fadeIn 1s ease-in-out;  /* 添加渐现动画 */
+    font-family: 'Arial', sans-serif;  /* 使用一种现代字体 */
+    height: 100%;  /* 让 .home-content 填充满 .main-content */
+    margin-top: -40px;  /* 居中的前提下再向上偏移20px */
+}
+
+/* 渐变效果 */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-100px);  /* 初始位置稍微向上偏移 */
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);  /* 最终回到正常位置 */
+    }
+}
