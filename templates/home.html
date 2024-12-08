@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首页</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/new.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/recent.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/search.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/type.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/location.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/user.css') }}">
+</head>
+<body>
+
+<!-- 顶部栏 -->
+<div class="top-bar">
+    <a href="home" class="home-link">
+        <div class="home-title">
+            <div class="home-title-big">HomeManager</div>  <!-- 大字部分 -->
+            <div class="home-title-small">您的家庭物品好管家</div>  <!-- 小字部分 -->
+        </div>
+    </a>
+    <div class="top-buttons">
+        <button onclick="loadContent('new')">新建</button>
+        <button onclick="loadContent('recent')">最近</button>
+        <button onclick="loadContent('search')">查询</button>
+        <button onclick="loadContent('type')">类别</button>
+        <button onclick="loadContent('location')">位置</button>
+        <button onclick="loadContent('user')">用户</button>
+    </div>
+</div>
+
+<!-- 左侧栏 -->
+<div class="side-bar">
+    <button id="calculateBtn" class="box" onclick="requestCalculation()">统计</button>
+    <div class="box result-box">
+        <div id="result1">价值总和</div>
+    </div>
+    <div class="box result-box">
+        <div id="result2">物品数量</div>
+    </div>
+    <div class="box result-box">
+        <div id="result3">类别数量</div>
+    </div>
+    <div class="box result-box">
+        <div id="result4">位置数量</div>
+    </div>
+</div>
+
+<!-- 主内容区域，欢迎页 -->
+<div class="main-content">
+    <h2>欢迎使用本系统！</h2>
+</div>
+
+<script src="{{ url_for('static', filename='js/home.js') }}"></script>
+<script src="{{ url_for('static', filename='js/new.js') }}"></script>
+<script src="{{ url_for('static', filename='js/recent.js') }}"></script>
+<script src="{{ url_for('static', filename='js/search.js') }}"></script>
+<script src="{{ url_for('static', filename='js/type.js') }}"></script>
+<script src="{{ url_for('static', filename='js/location.js') }}"></script>
+<script src="{{ url_for('static', filename='js/user.js') }}"></script>
+</body>
+</html>

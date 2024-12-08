@@ -1,8 +1,14 @@
-from flask import jsonify, request
+from flask import jsonify, request, render_template
 from flask_jwt_extended import create_access_token
 from models import db, User
 from app import bcrypt
 from . import user
+
+
+# 登录注册首页
+@user.route('/index')
+def index():
+    return render_template('index.html')
 
 
 @user.route('/login', methods=['POST'])
