@@ -5,12 +5,13 @@ from app import bcrypt
 from . import user
 
 
-# 登录注册首页
+# 登录注册
 @user.route('/index')
 def index():
     return render_template('index.html')
 
 
+# 用户登录
 @user.route('/login', methods=['POST'])
 def login():
     # 获取用户名和密码
@@ -33,7 +34,7 @@ def login():
     return jsonify({'message': '登录成功', 'access_token': access_token}), 200
 
 
-# 注册接口
+# 用户注册
 @user.route('/register', methods=['POST'])
 def register():
     # 获取用户名和密码和邮箱

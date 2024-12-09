@@ -107,9 +107,9 @@ function handleResponse(ok=false, data) {
             displayMessage('注册成功，请登录', 'success');
             setTimeout(() => {
                 isLogin = true  // 切换回登录的状态
-                switchToLoginView();  // 2秒后切换到登录界面
+                switchToLoginView();  // 1秒后切换到登录界面
                 clearErrorMessage();  // 清除消息
-            }, 2000);
+            }, 1000);
         }
 
         // 如果是登录成功，跳转到仪表盘
@@ -117,7 +117,7 @@ function handleResponse(ok=false, data) {
             displayMessage('登录成功，正在跳转...', 'success');
             setTimeout(() => {
                 window.location.href = '/home';  // 替换为你实际需要跳转的页面
-            }, 2000);  // 2秒后跳转
+            }, 1000);  // 1秒后跳转
         }
     } else {
         // 显示错误消息
@@ -144,10 +144,10 @@ function displayMessage(message, type) {
         errorMessage.classList.add('error');   // 添加错误样式
     }
 
-    // 消息显示 2 秒后消失
+    // 消息显示 1 秒后消失
     setTimeout(() => {
         clearErrorMessage();
-    }, 2000);  // 2秒后清除提示信息
+    }, 1000);  // 1秒后清除提示信息
 }
 
 // 清除错误消息

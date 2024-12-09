@@ -31,40 +31,48 @@ function handleSubmit(event, formType) {
 
     // 构造请求数据
     const data = {};
+
+    // 遍历 FormData 将数据保存到 data 对象
     formData.forEach((value, key) => {
-        data[key] = value;
+        // 如果是文件类型的数据，会以 File 对象的形式存在
+        if (value instanceof File) {
+            // 对于文件类型，直接将文件对象保留
+            data[key] = value;
+        } else {
+            // 对于普通的文本输入，仍然可以直接存入
+            data[key] = value || '';  // 如果字段为空，设置为空字符串
+        }
     });
 
-    // 发送 AJAX 请求
-    fetch(`/submit/${formType}`, {
+    // 确定 API 路径和请求数据，根据 formType 选择不同的路径和数据结构
+    let url = `/submit/${formType}`;
+
+    // 使用 FormData 发送请求
+    fetch(url, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
             'Authorization': `Bearer ${localStorage.getItem('jwt')}`  // 如果需要携带JWT
         },
-        body: JSON.stringify(data)
+        body: formData  // 使用 FormData 作为请求体
     })
     .then(response => response.json())
     .then(result => {
-        if (result.success) {
+        if (result.code == 200 || result.code == 201) {
             // 如果提交成功，弹出提示框
-            displayMessage_new('创建成功', 'success', formType);
+            displayMessage_new(result.message, 'success', formType);
             setTimeout(() => {
                 loadContent('new');  // 跳回创建页面
-            }, 2000);
+            }, 1000);
         } else {
             // 如果提交失败，显示错误消息
-            displayMessage_new('创建失败，请重试', 'error', formType);
-            setTimeout(() => {
-                loadContent('new');  // 跳回创建页面
-            }, 2000);
+            displayMessage_new(result.message, 'error', formType);
         }
     })
     .catch(error => {
         displayMessage_new('请求失败，请稍后再试', 'error', formType);
         setTimeout(() => {
             loadContent('new');  // 跳回创建页面
-        }, 2000);
+        }, 1000);
     });
 }
 
@@ -86,10 +94,10 @@ function displayMessage_new(message, type, formType) {
         errorMessage.classList.add('error');   // 添加错误样式
     }
 
-    // 消息显示 2 秒后消失
+    // 消息显示 1 秒后消失
     setTimeout(() => {
         clearErrorMessage();
-    }, 2000);  // 2秒后清除提示信息
+    }, 1000);  // 1秒后清除提示信息
 }
 
 // 清除错误消息

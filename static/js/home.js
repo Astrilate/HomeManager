@@ -1,26 +1,22 @@
 // 请求计算并更新结果框
 function requestCalculation() {
-    // 假设我们使用 fetch 来请求后端 API 进行计算
     fetch('/calculate', {
-        method: 'POST',
+        method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ action: 'calculate' })
-    })
-    .then(response => {
-        if (response.ok) {
-            return response.json();
-        } else {
-            throw new Error('请求失败');
+            'Authorization': `Bearer ${localStorage.getItem('jwt')}` // 使用 JWT
         }
     })
+    .then(response => response.json())
     .then(data => {
-        // 假设返回的数据为 { result1: 10, result2: 20, result3: 30, result4: 40 }
-        document.getElementById('result1').textContent = '价值总和: ' + data.result1;
-        document.getElementById('result2').textContent = '物品数量: ' + data.result2;
-        document.getElementById('result3').textContent = '类别数量: ' + data.result3;
-        document.getElementById('result4').textContent = '位置数量: ' + data.result4;
+        if (data.code === 200) {
+            document.getElementById('result1').textContent = '价值总和: ' + data.data.result1;
+            document.getElementById('result2').textContent = '物品数量: ' + data.data.result2;
+            document.getElementById('result3').textContent = '类别数量: ' + data.data.result3;
+            document.getElementById('result4').textContent = '位置数量: ' + data.data.result4;
+        } else {
+            alert('计算失败');
+        }
     })
     .catch(error => {
         console.error('Error:', error);

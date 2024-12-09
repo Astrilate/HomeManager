@@ -17,10 +17,6 @@
         <form id="item-info-form" onsubmit="handleSubmit(event, 'item')">
             <h3>填写物品信息</h3>
 
-            <!-- 图片 -->
-            <label for="item-image">图片：</label>
-            <input type="file" id="item-image" name="item-image" accept="image/*">
-
             <!-- 名称 -->
             <label for="item-name" class="required">名称：</label>
             <input type="text" id="item-name" name="item-name" placeholder="请输入物品名称" required>
@@ -34,8 +30,8 @@
             <input type="number" id="item-quantity" name="item-quantity" placeholder="请输入物品数量" required>
 
             <!-- 价格 -->
-            <label for="item-price" class="required">价格：</label>
-            <input type="number" id="item-price" name="item-price" placeholder="请输入物品价格" required>
+            <label for="item-price" class="required">单价：</label>
+            <input type="number" id="item-price" name="item-price" placeholder="请输入物品单价" required>
 
             <!-- 类别 -->
             <label for="item-category" class="required">类别：</label>
@@ -46,16 +42,20 @@
             <input type="text" id="item-location" name="item-location" placeholder="请输入物品位置" required>
 
             <!-- 过期时间 -->
-            <label for="item-expiry-date">过期时间：</label>
-            <input type="date" id="item-expiry-date" name="item-expiry-date">
+            <label for="item-expiry">过期时间：</label>
+            <input type="date" id="item-expiry" name="item-expiry">
 
             <!-- 保修时间 -->
-            <label for="item-warranty-date">保修时间：</label>
-            <input type="date" id="item-warranty-date" name="item-warranty-date">
+            <label for="item-warranty">保修时间：</label>
+            <input type="date" id="item-warranty" name="item-warranty">
+
+            <!-- 图片 -->
+            <label for="item-image">图片：</label>
+            <input type="file" id="item-image" name="item-image" accept="image/*">
 
             <!-- 附件 -->
-            <label for="item-attachments">附件：</label>
-            <input type="file" id="item-attachments" name="item-attachments">
+            <label for="item-attachment">附件：</label>
+            <input type="file" id="item-attachment" name="item-attachment">
 
             <div class="error" id="error-message1"></div>
             <button type="submit">提交</button>
@@ -86,10 +86,6 @@
         <form id="location-info-form" onsubmit="handleSubmit(event, 'location')">
             <h3>填写位置信息</h3>
 
-            <!-- 位置图片 -->
-            <label for="location-image">图片：</label>
-            <input type="file" id="location-image" name="location-image" accept="image/*">
-
             <!-- 位置名称 -->
             <label for="location-name" class="required">名称：</label>
             <input type="text" id="location-name" name="location-name" placeholder="请输入位置名称" required>
@@ -98,6 +94,10 @@
             <label for="location-description" class="required">描述：</label>
             <textarea id="location-description" name="location-description" placeholder="请输入位置描述"
                       required></textarea>
+            
+            <!-- 位置图片 -->
+            <label for="location-image">图片：</label>
+            <input type="file" id="location-image" name="location-image" accept="image/*">
 
             <div class="error" id="error-message3"></div>
             <button type="submit">提交</button>
