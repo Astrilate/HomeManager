@@ -4,9 +4,9 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 # 延迟导入所有模型
-from .item import Item
+from .item import Item, Category, Location, ItemHistory
 from .user import User
 
 # 声明公开的模块和类
 # 说明哪些内容可以在别的文件中用from <module> import *直接导入
-__all__ = ['db', 'Item', 'User']
+__all__ = ['db', 'Item', 'User', 'Category', 'Location', 'ItemHistory']
