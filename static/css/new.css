@@ -1,6 +1,167 @@
+/* new-content */
 .new-content {
-    background-color: lightblue;
-    padding: 20px;
-    font-size: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;  /* 全屏显示 */
+    flex-direction: column;
+}
+
+/* 按钮容器 */
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    max-width: 800px;
+    flex-wrap: wrap;  /* 使按钮能够适应容器宽度 */
+}
+
+/* 每个选择按钮 */
+.select-button {
+    margin-top: 13vh;
+    width: 200px;  /* 按钮宽度 */
+    height: 300px;   /* 按钮高度 */
+    font-size: 32px;  /* 增大字体 */
+    font-weight: 600;  /* 字体加粗 */
+    background: linear-gradient(145deg, #ffffff, #f5f5f5);  /* 渐变背景 */
+    color: #333;  /* 深灰色字体 */
+    border: 1px solid #ccc;  /* 增加边框，给按钮一些层次感 */
+    border-radius: 12px;  /* 更圆的角度 */
+    box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1), -2px -2px 5px rgba(255, 255, 255, 0.3);  /* 增强的阴影效果 */
+    cursor: pointer;
+    transition: all 0.2s ease;  /* 平滑的过渡效果 */
+    display: flex;
+    flex-direction: column;  /* 垂直排列图标和文字 */
+    justify-content: center;
+    align-items: center;
+    padding: 60px;  /* 给按钮内部添加一些内边距 */
+    position: relative;
+    animation: fadeIn 0.5s ease-in-out;  /* 添加渐现动画 */
+}
+
+/* 每个按钮的图标 */
+.select-button i {
+    font-size: 100px;  /* 增大图标 */
+    color: #4CAF50;  /* 图标颜色 */
+    margin-bottom: 50px;  /* 图标与文字之间的间距 */
+}
+
+/* 按钮 hover 状态 */
+.select-button:hover {
+    background: linear-gradient(145deg, #f5f5f5, #ffffff);  /* 背景渐变反转 */
+    box-shadow: 6px 10px 24px rgba(0, 0, 0, 0.5), -2px -2px 6px rgba(255, 255, 255, 0.3);  /* 阴影增大，提供立体感 */
+    transform: translateY(-12px);  /* 按钮轻微上移，提升交互感 */
+}
+
+/* 隐藏按钮 */
+.select-button.hidden {
+    display: none;
+}
+
+/* 表单容器 */
+.form-container {
+    display: none;
+    flex-direction: column;
+    justify-content: flex-start;
+    height: auto;  /* 让背景跟随内容的高度变化 */
+    width: 100%;
+    max-width: 520px;  /* 控制表单的宽度 */
+    padding: 30px;  /* 增加内边距，提升视觉效果 */
+    background-color: #ffffff;
+    border-radius: 15px;  /* 更圆的边角 */
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2), 0 4px 6px rgba(0, 0, 0, 0.2);  /* 增强的阴影效果 */
+    box-sizing: border-box;
+    animation: fadeIn 0.5s ease-in-out;  /* 添加渐现动画 */
+    flex-grow: 1; /* 让表单容器可以增长填充剩余空间 */
+}
+
+/* 表单标题 */
+.form-container h3 {
     text-align: center;
+    font-size: 26px;
+    color: #333;
+    font-weight: bold;
+    margin-bottom: 25px;  /* 增加标题和表单之间的间距 */
+    text-transform: uppercase;  /* 全大写 */
+    letter-spacing: 1px;  /* 字母间距 */
+}
+
+/* 输入框样式 */
+.form-container input, .form-container textarea {
+    padding: 14px;
+    font-size: 18px;
+    border: 2px solid #ddd;  /* 增加边框厚度，显得更稳重 */
+    border-radius: 8px;  /* 圆角 */
+    margin-bottom: 20px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;  /* 平滑过渡 */
+}
+
+/* 输入框获得焦点时的效果 */
+.form-container input:focus, .form-container textarea:focus {
+    border-color: #4CAF50;  /* 获得焦点时变为绿色边框 */
+    box-shadow: 0 0 8px rgba(76, 175, 80, 0.5);  /* 输入框周围的绿色阴影 */
+    outline: none;  /* 去除默认的蓝色边框 */
+}
+
+/* 提交按钮样式 */
+.form-container button {
+    margin-top: 30px;
+    padding: 14px;
+    background-color: #4CAF50;
+    color: white;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+/* 提交按钮 hover 状态 */
+.form-container button:hover {
+    background-color: #45a049;
+    transform: translateY(-2px);  /* 按钮悬浮时微微上移 */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);  /* 增强阴影 */
+}
+
+/* 为必填字段的标签添加红色的星号 */
+label.required::before {
+    content: "*";  /* 插入星号 */
+    color: red;  /* 红色 */
+    margin-right: 5px;  /* 星号与文字之间的间距 */
+    font-size: 18px;  /* 调整星号的大小 */
+    font-weight: bold;  /* 使星号加粗 */
+}
+
+/* 成功消息样式 */
+.success {
+    color: green;  /* 绿色字体 */
+    font-size: 20px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* 错误消息样式 */
+.error {
+    color: red;  /* 红色字体 */
+    font-size: 20px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* 渐变效果 */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-100px);  /* 初始位置稍微向上偏移 */
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);  /* 最终回到正常位置 */
+    }
 }

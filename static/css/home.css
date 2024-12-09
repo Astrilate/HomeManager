@@ -5,6 +5,11 @@
     box-sizing: border-box;
 }
 
+/* 对于 Webkit 浏览器（Chrome、Safari 等），隐藏滚动条 */
+*::-webkit-scrollbar {
+    display: none;  /* 隐藏滚动条 */
+}
+
 body {
     background-image: url('../images/background.jpg');  /* 设置背景图片 */
     background-size: cover;  /* 背景图片覆盖整个页面 */
@@ -102,13 +107,19 @@ body {
     margin-bottom: 10px;
     background-color: rgb(76, 175, 80);
     color: white;
-    border-radius: 5px;
+    border-radius: 15px;  /* 更圆润的角 */
     text-align: center;
     font-size: 20px;
     height: 70px;  /* 固定框的高度 */
     overflow: hidden;  /* 如果内容超出，隐藏超出部分 */
     text-overflow: ellipsis;  /* 如果内容太长，显示省略号 */
     white-space: nowrap;  /* 防止文本换行 */
+
+    /* 嵌入效果（模拟凹陷） */
+    box-shadow: inset 0px 4px 10px rgba(0, 0, 0, 0.2),  /* 内阴影，给人嵌入的感觉 */
+                0px 4px 10px rgba(0, 0, 0, 0.1);  /* 外阴影，增强层次感 */
+    background: linear-gradient(145deg, #66bb6a, #388e3c);  /* 渐变效果 */
+    transition: transform 0.2s ease, box-shadow 0.3s ease, background-color 0.3s ease;  /* 平滑过渡 */
 }
 
 /* 请求计算框：去掉边框 */
@@ -120,20 +131,26 @@ body {
     border-radius: 50%;  /* 设置圆形 */
     font-size: 20px;  /* 调整字体大小 */
     border: none;  /* 去掉按钮边框 */
-    transition: background-color 0.2s ease, transform 0.2s ease;  /* 平滑过渡效果 */
+    transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.3s ease;  /* 平滑过渡效果 */
+
+    /* 添加阴影效果 */
+    box-shadow: inset 0px 4px 10px rgba(0, 0, 0, 0.2),  /* 内阴影，给人嵌入的感觉 */
+                0px 4px 8px rgba(0, 0, 0, 0.1);  /* 外阴影，增强层次感 */
+    background: linear-gradient(145deg, #66bb6a, #388e3c);  /* 渐变效果 */
 }
 
 /* 请求计算框的悬停效果 */
 #calculateBtn:hover {
     background-color: #388E3C;  /* 悬停时背景颜色稍微加深，明显一点 */
     transform: scale(1.1);  /* 悬停时按钮稍微放大 */
+    box-shadow: inset 0px 8px 16px rgba(0, 0, 0, 0.3),  /* 更强的内阴影效果 */
+                0px 8px 16px rgba(0, 0, 0, 0.2);  /* 悬停时的外阴影加深 */
 }
 
 /* 符合框架大小的主内容区域样式，后续子页都可以使用不用再设置 */
 .main-content {
     margin-left: 13%;  /* 确保主内容不与左侧栏重叠 */
     margin-top: 22vh;  /* 确保主内容不与顶部栏重叠 */
-    height: 78vh;  /* 设置核心区域的高度 */
     overflow-y: auto;  /* 使核心区域可以垂直滚动 */
     padding: 20px;
 }
@@ -142,16 +159,13 @@ body {
 .home-content {
     display: flex;
     justify-content: center;  /* 水平居中 */
-    align-items: center;  /* 垂直居中 */
-    text-align: center;  /* 确保文字居中 */
+    margin-top: 20vh;
     font-size: 64px;  /* 字体大小 */
     color: #4CAF50;  /* 使用系统主色 */
     font-weight: bold;  /* 加粗字体 */
     text-shadow: 3px 3px 6px rgb(0, 0, 0, 0.3);  /* 添加文本阴影，增添立体感 */
-    animation: fadeIn 1s ease-in-out;  /* 添加渐现动画 */
+    animation: fadeIn 0.8s ease-in-out;  /* 添加渐现动画 */
     font-family: 'Arial', sans-serif;  /* 使用一种现代字体 */
-    height: 100%;  /* 让 .home-content 填充满 .main-content */
-    margin-top: -40px;  /* 居中的前提下再向上偏移20px */
 }
 
 /* 渐变效果 */

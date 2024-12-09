@@ -31,8 +31,9 @@ class Category(db.Model):
 class Location(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(50), unique=True, nullable=False)
-    description = db.Column(db.Text, nullable=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=True)  # 外键，用户专用的家庭位置
+    description = db.Column(db.Text, nullable=False)
+    image_url = db.Column(db.String(200), nullable=False)  # 位置图片 URL
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # 外键，用户专用的家庭位置
 
 
 # 物品修改历史表

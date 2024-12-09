@@ -1,3 +1,106 @@
 <div class="new-content">
-    <p>NEW</p>
+    <!-- 按钮区 -->
+    <div class="button-container">
+        <button class="select-button" onclick="showForm('item')">
+            <i class="fas fa-cube"></i> 物品
+        </button>
+        <button class="select-button" onclick="showForm('category')">
+            <i class="fas fa-tag"></i> 类别
+        </button>
+        <button class="select-button" onclick="showForm('location')">
+            <i class="fas fa-map-marker-alt"></i> 位置
+        </button>
+    </div>
+
+    <!-- 物品信息表单 -->
+    <div id="item-form" class="form-container">
+        <form id="item-info-form" onsubmit="handleSubmit(event, 'item')">
+            <h3>填写物品信息</h3>
+
+            <!-- 图片 -->
+            <label for="item-image">图片：</label>
+            <input type="file" id="item-image" name="item-image" accept="image/*">
+
+            <!-- 名称 -->
+            <label for="item-name" class="required">名称：</label>
+            <input type="text" id="item-name" name="item-name" placeholder="请输入物品名称" required>
+
+            <!-- 描述 -->
+            <label for="item-description" class="required">描述：</label>
+            <textarea id="item-description" name="item-description" placeholder="请输入物品描述" required></textarea>
+
+            <!-- 数量 -->
+            <label for="item-quantity" class="required">数量：</label>
+            <input type="number" id="item-quantity" name="item-quantity" placeholder="请输入物品数量" required>
+
+            <!-- 价格 -->
+            <label for="item-price" class="required">价格：</label>
+            <input type="number" id="item-price" name="item-price" placeholder="请输入物品价格" required>
+
+            <!-- 类别 -->
+            <label for="item-category" class="required">类别：</label>
+            <input type="text" id="item-category" name="item-category" placeholder="请输入物品类别" required>
+
+            <!-- 位置 -->
+            <label for="item-location" class="required">位置：</label>
+            <input type="text" id="item-location" name="item-location" placeholder="请输入物品位置" required>
+
+            <!-- 过期时间 -->
+            <label for="item-expiry-date">过期时间：</label>
+            <input type="date" id="item-expiry-date" name="item-expiry-date">
+
+            <!-- 保修时间 -->
+            <label for="item-warranty-date">保修时间：</label>
+            <input type="date" id="item-warranty-date" name="item-warranty-date">
+
+            <!-- 附件 -->
+            <label for="item-attachments">附件：</label>
+            <input type="file" id="item-attachments" name="item-attachments">
+
+            <div class="error" id="error-message1"></div>
+            <button type="submit">提交</button>
+        </form>
+    </div>
+
+    <!-- 类别信息表单 -->
+    <div id="category-form" class="form-container">
+        <form id="category-info-form" onsubmit="handleSubmit(event, 'category')">
+            <h3>填写类别信息</h3>
+
+            <!-- 类别名称 -->
+            <label for="category-name" class="required">名称：</label>
+            <input type="text" id="category-name" name="category-name" placeholder="请输入类别名称" required>
+
+            <!-- 类别描述 -->
+            <label for="category-description" class="required">描述：</label>
+            <textarea id="category-description" name="category-description" placeholder="请输入类别描述"
+                      required></textarea>
+
+            <div class="error" id="error-message2"></div>
+            <button type="submit">提交</button>
+        </form>
+    </div>
+
+    <!-- 位置信息表单 -->
+    <div id="location-form" class="form-container">
+        <form id="location-info-form" onsubmit="handleSubmit(event, 'location')">
+            <h3>填写位置信息</h3>
+
+            <!-- 位置图片 -->
+            <label for="location-image">图片：</label>
+            <input type="file" id="location-image" name="location-image" accept="image/*">
+
+            <!-- 位置名称 -->
+            <label for="location-name" class="required">名称：</label>
+            <input type="text" id="location-name" name="location-name" placeholder="请输入位置名称" required>
+
+            <!-- 位置描述 -->
+            <label for="location-description" class="required">描述：</label>
+            <textarea id="location-description" name="location-description" placeholder="请输入位置描述"
+                      required></textarea>
+
+            <div class="error" id="error-message3"></div>
+            <button type="submit">提交</button>
+        </form>
+    </div>
 </div>

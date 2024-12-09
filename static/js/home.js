@@ -28,22 +28,48 @@ function requestCalculation() {
     });
 }
 
-// 切换不同的 html 来控制核心区域
+// 记录已经加载的 JS 文件
+const loadedScripts = {};
+
 function loadContent(page) {
     const contentContainer = document.querySelector('.main-content');
+
     fetch('/load_page', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
         },
-        body: `page=${page}`,  // 传递页面名称给后端
+        body: `page=${page}`,
     })
     .then(response => response.text())
     .then(html => {
-        // 将后端渲染的内容加载到核心区域
+        // 更新核心区域内容
         contentContainer.innerHTML = html;
+
+        // 动态加载并执行 JS 文件（确保不重复加载）
+        loadScriptIfNeeded(page);
     })
     .catch(error => {
         console.error('Error loading content:', error);
     });
+}
+
+// 动态加载 JS 文件并执行，确保不重复加载
+function loadScriptIfNeeded(page) {
+    // 如果 JS 文件已经加载过，直接返回
+    if (loadedScripts[page]) {
+        // console.log(`${page} JS file already loaded.`);
+        return;
+    }
+    // 否则动态加载 JS 文件
+    const script = document.createElement('script');
+    script.src = `/static/js/${page}.js`;  // 假设每个子页面有对应的 JS 文件
+    script.onload = () => {
+        // console.log(`${page}.js loaded and executed.`);
+        loadedScripts[page] = true;  // 标记此 JS 文件已加载
+    };
+    script.onerror = () => {
+        console.error(`Failed to load ${page}.js`);
+    };
+    document.body.appendChild(script);  // 将脚本插入到页面中执行
 }
