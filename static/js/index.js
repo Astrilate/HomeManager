@@ -114,9 +114,11 @@ function handleResponse(ok=false, data) {
 
         // 如果是登录成功，跳转到仪表盘
         if (isLogin) {
+            // 存储 JWT 到 localStorage 或 sessionStorage
+            localStorage.setItem('jwt', data.access_token);
             displayMessage('登录成功，正在跳转...', 'success');
             setTimeout(() => {
-                window.location.href = '/home';  // 替换为你实际需要跳转的页面
+                window.location.href = '/home';
             }, 1000);  // 1秒后跳转
         }
     } else {

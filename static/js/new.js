@@ -51,7 +51,7 @@ function handleSubmit(event, formType) {
     fetch(url, {
         method: 'POST',
         headers: {
-            'Authorization': `Bearer ${localStorage.getItem('jwt')}`  // 如果需要携带JWT
+            'Authorization': `Bearer ${localStorage.getItem('jwt')}` // 使用 JWT
         },
         body: formData  // 使用 FormData 作为请求体
     })

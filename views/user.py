@@ -1,7 +1,10 @@
+import datetime
+import jwt
 from flask import jsonify, request, render_template
-from flask_jwt_extended import create_access_token
-from models import db, User
+
 from app import bcrypt
+from config import SECRET_KEY
+from models import db, User
 from . import user
 
 
@@ -28,9 +31,13 @@ def login():
     if not bcrypt.check_password_hash(user.password, password):
         return jsonify({'message': '密码错误'}), 401
 
-    # 创建 JWT 令牌，包含用户id的信息
-    access_token = create_access_token(identity=user.id)
-
+    # 生成JWT
+    payload = {
+        'user_id': user.id,
+        'username': user.username,
+        'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=1)  # 设置过期时间
+    }
+    access_token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
     return jsonify({'message': '登录成功', 'access_token': access_token}), 200
 
 

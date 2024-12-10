@@ -34,6 +34,7 @@ function loadContent(page) {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
+            'Authorization': `Bearer ${localStorage.getItem('jwt')}` // 使用 JWT
         },
         body: `page=${page}`,
     })

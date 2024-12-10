@@ -6,15 +6,7 @@ from sqlalchemy import func
 
 from models import db, Item, Category, Location, ItemHistory
 from . import main
-
-
-# 检查文件扩展名是否合法
-def allowed_image_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in {'png', 'jpg', 'jpeg', 'gif'}
-
-
-def allowed_attachment_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in {'txt', 'docx', 'xlsx', 'pptx', 'pdf', 'zip'}
+from .utils import token_required, allowed_image_file, allowed_attachment_file
 
 
 # 启动测试
@@ -31,15 +23,20 @@ def home():
 
 # 切换页面
 @main.route('/load_page', methods=['POST'])
-def load_page():
+@token_required
+def load_page(token):
+    user_id = token['user_id']
+    username = token['username']
+    print(user_id, username)
     page = request.form.get('page')  # 获取前端传来的页面信息
     return render_template(f'{page}.html')  # 渲染对应的页面
 
 
 # 信息统计
 @main.route('/calculate', methods=['GET'])
-def calculate():
-    user_id = 1
+@token_required
+def calculate(token):
+    user_id = token['user_id']
     # 计算物品的总价值
     total_value = db.session.query(func.sum(Item.quantity * Item.price)).filter(Item.user_id == user_id).scalar() or 0
     # 计算物品总数
@@ -60,8 +57,9 @@ def calculate():
 
 # 物品创建
 @main.route('/submit/item', methods=['POST'])
-def submit_item():
-    user_id = 1
+@token_required
+def submit_item(token):
+    user_id = token['user_id']
     # 获取form-data表单数据
     item_name = request.form.get('item-name')
     item_description = request.form.get('item-description')
@@ -140,8 +138,9 @@ def submit_item():
 
 # 类别创建
 @main.route('/submit/category', methods=['POST'])
-def submit_category():
-    user_id = 1
+@token_required
+def submit_category(token):
+    user_id = token['user_id']
     # 获取 form-data 表单数据
     category_name = request.form.get('category-name')
     category_description = request.form.get('category-description')
@@ -165,8 +164,9 @@ def submit_category():
 
 # 位置创建
 @main.route('/submit/location', methods=['POST'])
-def submit_location():
-    user_id = 1
+@token_required
+def submit_location(token):
+    user_id = token['user_id']
     # 获取 form-data 表单数据
     location_name = request.form.get('location-name')
     location_description = request.form.get('location-description')
