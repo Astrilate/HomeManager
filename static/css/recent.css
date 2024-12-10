@@ -1,6 +1,122 @@
+/* recent-content */
 .recent-content {
-    background-color: lightgreen;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;  /* 全屏显示 */
+    flex-direction: column;
     padding: 20px;
-    font-size: 24px;
-    text-align: center;
 }
+
+/* recent-container */
+.recent-container {
+    width: 100%;
+    max-width: 150vh;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 15px;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2), 0 4px 6px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.5s ease-in-out;
+    min-height: 70vh;
+}
+
+/* 表单标题 */
+.recent-container h3 {
+    text-align: center;
+    font-size: 26px;
+    color: #333;
+    font-weight: bold;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* 物品修改历史列标题 */
+.item-history-header {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);  /* 每列宽度均分 */
+    font-weight: bold;
+    margin-bottom: 10px;
+    background-color: #f4f4f4;
+    padding: 10px 0;
+    border-bottom: 2px solid #ddd;
+}
+
+/* 每个列标题 */
+.item-history-header span {
+    text-align: center;
+    font-size: 18px;
+    color: #333;
+    padding: 0 10px;
+}
+
+/* 物品修改历史行样式 */
+.item-history-row {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);  /* 每列宽度均分 */
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+/* 每行物品内容 */
+.item-history-row span {
+    font-size: 16px;
+    color: #333;
+    text-align: center;  /* 确保每列内容居中 */
+    padding: 0 10px;
+}
+
+/* 错误消息样式 */
+.error {
+    color: red;
+    font-size: 20px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* 渐变效果 */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-100px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* 分页控件 */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.page-btn {
+    padding: 8px 8px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 0 10px;
+    transition: background-color 0.2s ease;
+}
+
+.page-btn:hover {
+    background-color: #45a049;
+}
+
+.page-btn:disabled {
+    background-color: #ddd;
+    cursor: not-allowed;
+}
+
+.page-info {
+    font-size: 16px;
+    color: #333;
+}
+

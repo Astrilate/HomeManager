@@ -45,6 +45,7 @@ function loadContent(page) {
 
         // 动态加载并执行 JS 文件（确保不重复加载）
         loadScriptIfNeeded(page);
+
     })
     .catch(error => {
         console.error('Error loading content:', error);
@@ -56,6 +57,12 @@ function loadScriptIfNeeded(page) {
     // 如果 JS 文件已经加载过，直接返回
     if (loadedScripts[page]) {
         // console.log(`${page} JS file already loaded.`);
+
+        // 假设每个页面都有一个初始化函数 `init()`，很重要，因为子页面的js文件无法自己调用DOMContentLoaded
+        // 只能能这样手动进行一次初始化，来更新页面的信息
+        if (typeof window[page + 'Init'] === 'function') {
+            window[page + 'Init']();  // 调用页面对应的初始化函数
+        }
         return;
     }
     // 否则动态加载 JS 文件
@@ -64,6 +71,11 @@ function loadScriptIfNeeded(page) {
     script.onload = () => {
         // console.log(`${page}.js loaded and executed.`);
         loadedScripts[page] = true;  // 标记此 JS 文件已加载
+
+        // 假设每个页面都有一个初始化函数 `init()`
+        if (typeof window[page + 'Init'] === 'function') {
+            window[page + 'Init']();  // 调用页面对应的初始化函数
+        }
     };
     script.onerror = () => {
         console.error(`Failed to load ${page}.js`);

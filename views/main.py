@@ -25,9 +25,7 @@ def home():
 @main.route('/load_page', methods=['POST'])
 @token_required
 def load_page(token):
-    user_id = token['user_id']
-    username = token['username']
-    print(user_id, username)
+    print("id:", token['user_id'], ", username:", token['username'], ", 正在操作")
     page = request.form.get('page')  # 获取前端传来的页面信息
     return render_template(f'{page}.html')  # 渲染对应的页面
 
@@ -199,3 +197,51 @@ def submit_location(token):
     db.session.commit()
 
     return jsonify({'message': '位置创建成功', 'code': 201})
+
+
+# 最近记录
+@main.route('/get/item-history', methods=['GET'])
+@token_required
+def get_item_history(token):
+    user_id = token['user_id']
+    # 获取查询参数，默认为第一页，每页10条数据
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 10, type=int)
+
+    # 查询当前用户的物品修改记录，连接查询 Item、Category 和 Location
+    item_history_query = (db.session.query(ItemHistory, Item, Category, Location)
+                          .join(Item, ItemHistory.item_id == Item.id)  # 连接 Item 表
+                          .join(Category, Item.category_id == Category.id)  # 连接 Category 表
+                          .join(Location, Item.location_id == Location.id)  # 连接 Location 表
+                          .filter(ItemHistory.user_id == user_id)
+                          .order_by(ItemHistory.changed_at.desc()))
+
+    # 分页查询
+    item_history_paginated = item_history_query.paginate(page=page, per_page=per_page, error_out=False)
+
+    # 获取分页后的数据
+    item_history = item_history_paginated.items
+    total_pages = item_history_paginated.pages
+    current_page = item_history_paginated.page
+
+    # 格式化数据返回
+    item_history_data = [{
+        'id': record.ItemHistory.id,
+        'user_id': record.ItemHistory.user_id,
+        'item_id': record.ItemHistory.item_id,
+        'action': record.ItemHistory.action,
+        'quantity': record.ItemHistory.quantity,
+        'changed_at': record.ItemHistory.changed_at.isoformat(),
+        'item_name': record.Item.name,
+        'category_name': record.Category.name,
+        'location_name': record.Location.name
+    } for record in item_history]
+
+    return jsonify({
+        'code': 200,
+        'data': item_history_data,
+        'total': item_history_paginated.total,
+        'pages': total_pages,
+        'page': current_page,
+        'per_page': per_page
+    })

@@ -1,3 +1,25 @@
 <div class="recent-content">
-    <p>RECENT</p>
+    <!-- 最近修改过的物品列表 -->
+    <div id="recent-items" class="recent-container">
+        <h3>最近修改过的物品</h3>
+        <!-- 物品修改历史列标题 -->
+        <div class="item-history-header">
+            <span>物品名称</span>
+            <span>类别名称</span>
+            <span>位置名称</span>
+            <span>操作</span>
+            <span>数量</span>
+            <span>修改时间</span>
+        </div>
+        <div id="item-history-list"></div>
+
+        <!-- 分页控件 -->
+        <div id="pagination" class="pagination">
+            <button id="prev-page" class="page-btn" onclick="goToPreviousPage()">上一页</button>
+            <span id="page-info" class="page-info"></span>
+            <button id="next-page" class="page-btn" onclick="goToNextPage()">下一页</button>
+        </div>
+
+        <div class="error" id="error-message"></div>
+    </div>
 </div>
