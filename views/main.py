@@ -4,6 +4,7 @@ from datetime import datetime
 from flask import render_template, jsonify, request
 from sqlalchemy import func
 
+from config import UPLOAD_FOLDER_IMAGES, UPLOAD_FOLDER_ATTACHMENTS
 from models import db, Item, Category, Location, ItemHistory
 from . import main
 from .utils import token_required, allowed_image_file, allowed_attachment_file
@@ -89,8 +90,8 @@ def submit_item(token):
         # 确保 item_name 编码为 UTF-8 字符串，能在下面的格式化字符串中显示
         encoded_item_name = item_name.encode('utf-8').decode('utf-8')
         item_image_filename = f"{user_id}_item_{encoded_item_name}{file_extension}"  # 用户ID_物品_物品名称，避免重复覆盖
-        item_image.save(os.path.join('uploads', 'images', item_image_filename))
-        item_image_filename = item_image_filename.replace(os.sep, '/')
+        item_image_filename = UPLOAD_FOLDER_IMAGES + item_image_filename
+        item_image.save(item_image_filename)
     elif item_image:
         return jsonify({'message': '图片格式有误', 'code': 400})
     item_attachment_filename = None
@@ -98,8 +99,8 @@ def submit_item(token):
         file_extension = os.path.splitext(item_attachment.filename)[1]  # 提取扩展名
         encoded_item_name = item_name.encode('utf-8').decode('utf-8')
         item_attachment_filename = f"{user_id}_item_{encoded_item_name}{file_extension}"  # 用户ID_物品_物品名称
-        item_attachment.save(os.path.join('uploads', 'attachments', item_attachment_filename))
-        item_attachment_filename = item_attachment_filename.replace(os.sep, '/')
+        item_attachment_filename = UPLOAD_FOLDER_ATTACHMENTS + item_attachment_filename
+        item_attachment.save(item_attachment_filename)
     elif item_attachment:
         return jsonify({'message': '附件格式有误', 'code': 400})
 
@@ -181,8 +182,8 @@ def submit_location(token):
         file_extension = os.path.splitext(location_image.filename)[1]  # 提取扩展名
         encoded_location_name = location_name.encode('utf-8').decode('utf-8')
         location_image_filename = f"{user_id}_location_{encoded_location_name}{file_extension}"  # 用户ID_位置_位置名称
-        location_image.save(os.path.join('uploads', 'images', location_image_filename))
-        location_image_filename = location_image_filename.replace(os.sep, '/')
+        location_image_filename = UPLOAD_FOLDER_IMAGES + location_image_filename
+        location_image.save(location_image_filename)
     elif location_image:
         return jsonify({'message': '图片格式有误', 'code': 400})
 

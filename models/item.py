@@ -1,5 +1,3 @@
-from sqlalchemy import Enum
-
 from . import db
 
 

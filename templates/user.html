@@ -1,3 +1,57 @@
-<div class="user-content">
-    <p>USER</p>
+<div class="user-info-container">
+    <!-- 用户信息表单 -->
+    <div class="user-info-form">
+        <div class="avatar-container">
+            <img id="avatar" src="static/images/default_photo.jpeg" alt="头像" class="avatar-img"
+                 onclick="triggerAvatarUpload()"/>
+            <input type="file" id="avatar-upload" accept="image/*" onchange="previewAvatar(event)"
+                   style="display:none"/>
+        </div>
+        <div class="info-row">
+            <span class="info-label">类型:</span>
+            <span class="info-value" id="type"></span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">用户 ID:</span>
+            <span class="info-value" id="user_id"></span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">用户名:</span>
+            <span class="info-value" id="username"></span>
+            <button class="edit-btn" onclick="editField('username')">修改</button>
+        </div>
+        <div class="info-row">
+            <span class="info-label">密码:</span>
+            <span class="info-value" id="password"></span>
+            <button class="edit-btn" onclick="editField('password')">修改</button>
+        </div>
+        <div class="info-row">
+            <span class="info-label">描述:</span>
+            <span class="info-value" id="description"></span>
+            <button class="edit-btn" onclick="editField('description')">修改</button>
+        </div>
+        <div class="info-row">
+            <span class="info-label">邮箱:</span>
+            <span class="info-value" id="email"></span>
+            <button class="edit-btn" onclick="editField('email')">修改</button>
+        </div>
+        <div class="info-row">
+            <span class="info-label">电话:</span>
+            <span class="info-value" id="telephone"></span>
+            <button class="edit-btn" onclick="editField('telephone')">修改</button>
+        </div>
+    </div>
 </div>
+
+<!-- 编辑弹窗 -->
+<div id="edit-modal" class="edit-modal">
+    <div class="modal-content">
+        <h4>修改信息</h4>
+        <!-- 改成 textarea -->
+        <textarea id="edit-value"></textarea>
+        <div class="error" id="error-message-user"></div>
+        <button onclick="saveChanges()">提交</button>
+        <button onclick="closeModal()">取消</button>
+    </div>
+</div>
+

@@ -71,7 +71,8 @@ function updatePagination() {
     const pageInfo = document.getElementById('page-info');
 
     // 更新页码显示
-    pageInfo.innerHTML = `第 ${currentPage} 页 / 共 ${totalPages} 页`;
+    if (currentPage == 1 && totalPages == 0) pageInfo.innerHTML = `第 ${0} 页 / 共 ${0} 页`;
+    else pageInfo.innerHTML = `第 ${currentPage} 页 / 共 ${totalPages} 页`;
 
     // 更新按钮状态
     if (currentPage <= 1) {
