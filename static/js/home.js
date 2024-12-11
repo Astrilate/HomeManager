@@ -26,10 +26,10 @@ function requestCalculation() {
 
 // 记录已经加载的 JS 文件
 const loadedScripts = {};
-
-function loadContent(page) {
+// 借用一下，到时候改回去
+function loadContent(page, item_id=1) {
     const contentContainer = document.querySelector('.main-content');
-
+    window.currentItemId = item_id;
     fetch('/load_page', {
         method: 'POST',
         headers: {

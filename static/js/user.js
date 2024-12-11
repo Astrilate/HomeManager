@@ -70,7 +70,6 @@ function uploadAvatar(file) {
     .then(response => response.json())
     .then(data => {
         if (data.code === 200) {
-            // 更新用户信息
             document.getElementById('avatar').src = data.data.image_url;
         } else {
             displayMessage_user(data.message, "error");
@@ -92,34 +91,30 @@ function editField(field) {
 // 保存修改
 function saveChanges() {
     const newValue = document.getElementById("edit-value").value;
-    if (newValue) {
-        // 发送修改请求到后端（这里的 API 示例需要根据你的后端接口进行调整）
-        fetch(`/user-update/${currentField}`, {
-            method: 'POST', // 使用 POST 请求进行修改
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${localStorage.getItem('jwt')}` // 使用 JWT 认证
-            },
-            body: JSON.stringify({ value: newValue }) // 发送新值到后端
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.code === 200) { // 根据返回的 code 判断是否成功
-                displayMessage_user("修改成功", "success")
-                setTimeout(() => {
-                    closeModal();
-                }, 1000);
-                if (currentField != "password") document.getElementById(currentField).innerText = newValue;
-            } else {
-                displayMessage_user(data.message, "error")
-            }
-        })
-        .catch(error => {
-            displayMessage_user("网络错误，请稍后再试", "error")
-        });
-    } else {
-        displayMessage_user("修改内容不能为空", "error")
-    }
+    // 发送修改请求到后端
+    fetch(`/user-update/${currentField}`, {
+        method: 'POST', // 使用 POST 请求进行修改
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${localStorage.getItem('jwt')}` // 使用 JWT 认证
+        },
+        body: JSON.stringify({ value: newValue }) // 发送新值到后端
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.code === 200) { // 根据返回的 code 判断是否成功
+            displayMessage_user("修改成功", "success")
+            setTimeout(() => {
+                closeModal();
+            }, 1000);
+            if (currentField != "password") document.getElementById(currentField).innerText = newValue;
+        } else {
+            displayMessage_user(data.message, "error")
+        }
+    })
+    .catch(error => {
+        displayMessage_user("网络错误，请稍后再试", "error")
+    });
 }
 
 // 关闭弹窗
@@ -150,6 +145,8 @@ function displayMessage_user(message, type) {
 
 // 清除错误消息
 function clearErrorMessage() {
-    document.getElementById('error-message-user').textContent = '';
-    document.getElementById('error-message-user').classList.remove('success', 'error');
+    if (document.getElementById('error-message-user')) {
+        document.getElementById('error-message-user').textContent = '';
+        document.getElementById('error-message-user').classList.remove('success', 'error');
+    }
 }

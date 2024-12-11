@@ -26,7 +26,6 @@ def home():
 @main.route('/load_page', methods=['POST'])
 @token_required
 def load_page(token):
-    print("id:", token['user_id'], ", username:", token['username'], ", 正在操作")
     page = request.form.get('page')  # 获取前端传来的页面信息
     return render_template(f'{page}.html')  # 渲染对应的页面
 
@@ -126,8 +125,8 @@ def submit_item(token):
     item_history = ItemHistory(
         user_id=user_id,
         item_id=item.id,
-        action="创建",
-        quantity=item.quantity,
+        action_type="创建",
+        action=f"创建了这个物品",
         changed_at=datetime.now()
     )
     db.session.add(item_history)
@@ -230,8 +229,8 @@ def get_item_history(token):
         'id': record.ItemHistory.id,
         'user_id': record.ItemHistory.user_id,
         'item_id': record.ItemHistory.item_id,
+        'action_type': record.ItemHistory.action_type,
         'action': record.ItemHistory.action,
-        'quantity': record.ItemHistory.quantity,
         'changed_at': record.ItemHistory.changed_at.isoformat(),
         'item_name': record.Item.name,
         'category_name': record.Category.name,
@@ -246,3 +245,209 @@ def get_item_history(token):
         'page': current_page,
         'per_page': per_page
     })
+
+
+# 获取物品信息
+@main.route('/item-info', methods=['GET'])
+@token_required
+def get_item_info(token):
+    user_id = token['user_id']
+    item_id = request.args.get('item_id')
+
+    # 检验参数
+    if not item_id:
+        return jsonify({'message': '物品ID缺失', 'code': 400})
+    item = Item.query.filter_by(id=item_id, user_id=user_id).first()
+    if not item:
+        return jsonify({'message': '物品不存在', 'code': 400})
+
+    # 获取物品相关的其他信息（如 category, location）
+    category = Category.query.get(item.category_id)
+    location = Location.query.get(item.location_id)
+
+    # 返回物品信息
+    item_info = {
+        'image_url': item.image_url,
+        'name': item.name,
+        'description': item.description,
+        'quantity': item.quantity,
+        'price': item.price,
+        'category': category.name,
+        'location': location.name,
+        'expiry': item.expiry,
+        'warranty': item.warranty,
+        'created_at': item.created_at,
+        'attachment_url': item.attachment_url
+    }
+
+    return jsonify({'message': '信息获取成功', 'code': 200, 'data': item_info})
+
+
+# 更新物品信息
+@main.route('/item-update/<field>', methods=['POST'])
+@token_required
+def update_item_field(token, field):
+    user_id = token['user_id']
+    item_id = request.get_json().get('item_id')
+    new_value = request.get_json().get('value')
+
+    # 检验参数
+    if not item_id:
+        return jsonify({'message': '物品ID缺失', 'code': 400})
+    item = Item.query.filter_by(id=item_id, user_id=user_id).first()
+    if not item:
+        return jsonify({'message': '物品不存在', 'code': 400})
+
+    # 根据字段更新物品信息
+    if field == 'name':
+        item.name = new_value
+        action = "更新了物品的名称"
+    elif field == 'description':
+        item.description = new_value
+        action = "更新了物品的描述"
+    elif field == 'quantity':
+        try:
+            new_value = int(new_value)
+            item.quantity = new_value
+            action = "更新了物品的数量"
+        except ValueError:
+            return jsonify({'message': '数量必须是整数', 'code': 400})
+    elif field == 'price':
+        try:
+            new_value = float(new_value)
+            item.price = new_value
+            action = "更新了物品的单价"
+        except ValueError:
+            return jsonify({'message': '价格必须是浮点数', 'code': 400})
+    elif field == 'category':
+        category = Category.query.filter_by(name=new_value, user_id=user_id).first()
+        if category:
+            item.category_id = category.id
+            action = "更新了物品的类别"
+        else:
+            return jsonify({'message': '类别不存在，请先创建', 'code': 400})
+    elif field == 'location':
+        location = Location.query.filter_by(name=new_value, user_id=user_id).first()
+        if location:
+            item.location_id = location.id
+            action = "更新了物品的位置"
+        else:
+            return jsonify({'message': '位置不存在，请先创建', 'code': 400})
+    elif field == 'expiry':
+        item.expiry = new_value
+        action = "更新了物品的过期时间"
+    elif field == 'warranty':
+        item.warranty = new_value
+        action = "更新了物品的保修时间"
+    else:
+        return jsonify({'message': '无效属性', 'code': 400})
+    db.session.commit()
+
+    item_history = ItemHistory(
+        user_id=user_id,
+        item_id=item.id,
+        action_type="修改",
+        action=action,
+        changed_at=datetime.now()
+    )
+    db.session.add(item_history)
+    db.session.commit()
+
+    return jsonify({'message': f'{field}修改完成', 'code': 200})
+
+
+# 更新物品图片信息
+@main.route('/item-update/picture', methods=['POST'])
+@token_required
+def update_picture(token):
+    user_id = token['user_id']
+    item_id = request.form.get('item_id')
+
+    # 检验参数
+    if not item_id:
+        return jsonify({'message': '物品ID缺失', 'code': 400})
+    item = Item.query.filter_by(id=item_id, user_id=user_id).first()
+    if not item:
+        return jsonify({'message': '物品不存在', 'code': 400})
+
+    # 获取上传的文件
+    file = request.files['picture']
+    if file:
+        if allowed_image_file(file.filename):
+            file_extension = os.path.splitext(file.filename)[1]  # 提取扩展名
+            encoded_item_name = item.name.encode('utf-8').decode('utf-8')
+            item_image_filename = f"{user_id}_item_{encoded_item_name}{file_extension}"  # 用户ID_物品_物品名称，避免重复覆盖
+            item_image_filename = UPLOAD_FOLDER_IMAGES + item_image_filename
+            file.save(item_image_filename)
+            # 更新数据库中的信息
+            item.image_url = item_image_filename
+            db.session.commit()
+
+            item_history = ItemHistory(
+                user_id=user_id,
+                item_id=item.id,
+                action_type="修改",
+                action="更新了物品的图片",
+                changed_at=datetime.now()
+            )
+            db.session.add(item_history)
+            db.session.commit()
+
+            return jsonify({
+                'message': '图片更新成功',
+                'code': 200,
+                'data': {'image_url': item_image_filename}
+            })
+        else:
+            return jsonify({'message': '图片类型不支持', 'code': 400})
+    else:
+        return jsonify({'message': '未上传图片', 'code': 400})
+
+
+# 更新物品附件信息
+@main.route('/item-update/attachment', methods=['POST'])
+@token_required
+def update_attachment(token):
+    user_id = token['user_id']
+    item_id = request.form.get('item_id')
+
+    # 检验参数
+    if not item_id:
+        return jsonify({'message': '物品ID缺失', 'code': 400})
+    item = Item.query.filter_by(id=item_id, user_id=user_id).first()
+    if not item:
+        return jsonify({'message': '物品不存在', 'code': 400})
+
+    # 获取上传的文件
+    file = request.files.get('attachment')
+    if file:
+        if allowed_attachment_file(file.filename):
+            file_extension = os.path.splitext(file.filename)[1]  # 提取扩展名
+            encoded_item_name = item.name.encode('utf-8').decode('utf-8')
+            attachment_filename = f"{user_id}_item_{encoded_item_name}{file_extension}"  # 用户ID_物品_物品名称，避免重复覆盖
+            attachment_filepath = UPLOAD_FOLDER_ATTACHMENTS + attachment_filename
+            file.save(attachment_filepath)
+
+            # 更新数据库中的附件路径
+            item.attachment_url = attachment_filepath
+            db.session.commit()
+
+            item_history = ItemHistory(
+                user_id=user_id,
+                item_id=item.id,
+                action_type="修改",
+                action="更新了物品的附件",
+                changed_at=datetime.now()
+            )
+            db.session.add(item_history)
+            db.session.commit()
+
+            return jsonify({
+                'message': '附件上传成功',
+                'code': 200,
+                'data': {'attachment_url': attachment_filepath}
+            })
+        else:
+            return jsonify({'message': '附件类型不支持', 'code': 400})
+    else:
+        return jsonify({'message': '未上传附件', 'code': 400})

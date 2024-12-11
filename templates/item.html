@@ -1,0 +1,72 @@
+<div class="item-info-container">
+    <!-- 物品信息表单 -->
+    <div class="item-info-form">
+        <div class="picture-container">
+            <img id="picture" src="static/images/default_item.jpg" alt="图片" class="picture-img"
+                 onclick="triggerPictureUpload()"/>
+            <input type="file" id="picture-upload" accept="image/*" onchange="previewPicture(event)"
+                   style="display:none"/>
+        </div>
+        <div class="info-row">
+            <span class="info-label">名称:</span>
+            <span class="info-value" id="name"></span>
+            <button class="edit-btn" onclick="editField('name')">修改</button>
+        </div>
+        <div class="info-row">
+            <span class="info-label">描述:</span>
+            <span class="info-value" id="description"></span>
+            <button class="edit-btn" onclick="editField('description')">修改</button>
+        </div>
+        <div class="info-row">
+            <span class="info-label">数量:</span>
+            <span class="info-value" id="quantity"></span>
+            <button class="edit-btn" onclick="editField('quantity')">修改</button>
+        </div>
+        <div class="info-row">
+            <span class="info-label">单价:</span>
+            <span class="info-value" id="price"></span>
+            <button class="edit-btn" onclick="editField('price')">修改</button>
+        </div>
+        <div class="info-row">
+            <span class="info-label">类别:</span>
+            <span class="info-value" id="category"></span>
+            <button class="edit-btn" onclick="editField('category')">修改</button>
+        </div>
+        <div class="info-row">
+            <span class="info-label">位置:</span>
+            <span class="info-value" id="location"></span>
+            <button class="edit-btn" onclick="editField('location')">修改</button>
+        </div>
+        <div class="info-row">
+            <span class="info-label">过期时间:</span>
+            <input type="date" id="expiry" class="info-value" disabled/>
+            <button class="edit-btn" onclick="editField('expiry')">修改</button>
+        </div>
+        <div class="info-row">
+            <span class="info-label">保修时间:</span>
+            <input type="date" id="warranty" class="info-value" disabled/>
+            <button class="edit-btn" onclick="editField('warranty')">修改</button>
+        </div>
+        <div class="info-row">
+            <span class="info-label">创建时间:</span>
+            <span class="info-value" id="created_at"></span>
+        </div>
+        <div class="info-row">
+            <span class="info-label">附件:</span>
+            <span class="info-value" id="attachment"></span>
+            <button class="edit-btn" onclick="editField('attachment')">修改</button>
+            <input type="file" id="attachment-upload" style="display:none;" onchange="handleAttachmentUpload(event)"/>
+        </div>
+    </div>
+</div>
+
+<!-- 编辑弹窗 -->
+<div id="edit-modal" class="edit-modal">
+    <div class="modal-content">
+        <h4>修改信息</h4>
+        <textarea id="edit-value"></textarea>
+        <div class="error" id="error-message-item"></div>
+        <button onclick="saveChanges()">提交</button>
+        <button onclick="closeModal()">取消</button>
+    </div>
+</div>

@@ -1,0 +1,188 @@
+/* 物品信息容器 */
+.item-info-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 20px;
+}
+
+/* 物品信息表单 */
+.item-info-form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 15px;  /* 使用圆角 */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3), 0 6px 12px rgba(0, 0, 0, 0.3); /* 添加阴影 */
+    width: 60%;
+    max-width: 1000px;
+    box-sizing: border-box;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+/* 图片区域 */
+.picture-container {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.picture-img {
+    width: 20vh;
+    height: 20vh;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 10px;
+    border: 2px solid #ddd;
+    cursor: pointer;
+}
+
+#picture-upload {
+    display: none;
+}
+
+/* 每行信息 */
+.info-row {
+    display: flex;
+    align-items: center;        /* 垂直居中对齐 */
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+    width: 100%;
+}
+
+/* 信息标签 */
+.info-label {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+    text-align: left;           /* 标签文本左对齐 */
+    width: 30%;                 /* 标签宽度固定 */
+    min-width: 120px;           /* 最小宽度 */
+}
+
+/* 信息值 */
+.info-value {
+    font-size: 16px;
+    color: #555;
+    text-align: left;           /* 信息文本左对齐 */
+    width: 40%;                 /* 信息宽度固定 */
+    min-width: 200px;           /* 最小宽度 */
+    word-wrap: break-word;      /* 自动换行 */
+    flex-grow: 1;               /* 让信息值区域占据剩余空间 */
+}
+
+/* 编辑按钮 */
+.edit-btn {
+    padding: 6px 12px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-left: 20px; /* 确保按钮有间距 */
+}
+
+/* 弹窗样式 */
+.edit-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.2);
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 15px; /* 圆角 */
+    max-width: 600px; /* 增加宽度 */
+    min-height: 300px; /* 设置最小高度 */
+    width: 90%;
+    text-align: center;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3), 0 6px 12px rgba(0, 0, 0, 0.3); /* 添加阴影 */
+    animation: fadeIn 0.3s ease-in-out;
+    overflow-y: auto; /* 支持滚动 */
+    word-wrap: break-word; /* 强制文字换行 */
+    word-break: break-word; /* 兼容多种文字类型 */
+}
+
+/* 输入框样式 */
+.modal-content input {
+    width: 100%; /* 确保输入框宽度为100% */
+    padding: 12px; /* 增加内边距 */
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box; /* 确保宽度包含内边距和边框 */
+    height: 40px; /* 增加高度 */
+    word-wrap: break-word; /* 强制换行 */
+    word-break: break-word; /* 兼容多种文字类型 */
+}
+
+/* 文本框样式 */
+.modal-content textarea {
+    width: 100%; /* 确保文本框宽度为100% */
+    height: 100%;
+    padding: 12px; /* 增加内边距 */
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-sizing: border-box;
+    height: 200px; /* 增加高度 */
+    resize: none; /* 禁止用户调整大小 */
+    word-wrap: break-word; /* 强制换行 */
+    overflow-wrap: break-word; /* 确保长文字换行 */
+}
+
+/* 修改信息标题 */
+.modal-content h4 {
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+/* 按钮*/
+.modal-content button {
+    padding: 8px 12px; /* 增加按钮内边距 */
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px; /* 调整字体大小 */
+}
+
+/* 按钮悬浮 */
+.modal-content button:hover {
+    background-color: #45a049;
+}
+
+/* 成功消息样式 */
+.success {
+    color: green;  /* 绿色字体 */
+    font-size: 20px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* 错误消息样式 */
+.error {
+    color: red;  /* 红色字体 */
+    font-size: 20px;
+    text-align: center;
+    margin-top: 20px;
+}
+
+/* 渐变效果 */
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-100px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

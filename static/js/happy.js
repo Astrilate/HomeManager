@@ -1,0 +1,3 @@
+function happyInit() {
+    console.log("???")
+}

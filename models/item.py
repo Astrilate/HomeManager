@@ -13,7 +13,7 @@ class Item(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # 外键，物品所有者
     expiry = db.Column(db.DateTime, nullable=True)  # 过期时间
     warranty = db.Column(db.DateTime, nullable=True)  # 保修时间
-    image_url = db.Column(db.String(255), nullable=True)  # 用于存储图片路径
+    image_url = db.Column(db.String(255), default="static/images/default_item.jpg", nullable=False)  # 用于存储图片路径
     attachment_url = db.Column(db.String(255), nullable=True)  # 用于存储附件路径
     created_at = db.Column(db.DateTime, nullable=False)  # 创建时间
 
@@ -40,6 +40,6 @@ class ItemHistory(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # 外键，关联指定用户
     item_id = db.Column(db.Integer, db.ForeignKey('item.id'), nullable=False)  # 外键，关联指定物品
-    action = db.Column(db.String(50), nullable=False)  # 操作类型，包括创建、修改、删除，只能在后端代码里面进行检查
-    quantity = db.Column(db.Integer, nullable=False)  # 修改数量
+    action_type = db.Column(db.String(50), nullable=False)  # 操作类型，包括创建、修改、删除，只能在后端代码里面进行检查
+    action = db.Column(db.String(255), nullable=False)  # 具体操作说明，后端格式化输入
     changed_at = db.Column(db.DateTime, nullable=False)  # 操作时间

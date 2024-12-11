@@ -33,20 +33,28 @@ function fetchItemHistory(page) {
 function displayItemHistory(history) {
     const historyList = document.getElementById('item-history-list');
     historyList.innerHTML = ''; // 清空现有内容
+
     // 如果有数据，遍历并渲染记录
     history.forEach(record => {
         const recordRow = document.createElement('div');
         recordRow.classList.add('item-history-row');
+
+        // 将物品名称包裹在可点击的 span 标签中
         recordRow.innerHTML = `
-            <span>${record.item_name}</span>
+            <span class="recent-item-name" onclick="handleItemClick('${record.item_id}')">${record.item_name}</span>
             <span>${record.category_name}</span>
             <span>${record.location_name}</span>
+            <span>${record.action_type}</span>
             <span>${record.action}</span>
-            <span>${record.quantity}</span>
             <span>${new Date(record.changed_at).toLocaleString()}</span>
         `;
         historyList.appendChild(recordRow);
     });
+}
+
+// 物品名称点击事件处理函数，打开对应物品的信息详情页
+function handleItemClick(itemId) {
+    loadContent("item", itemId);
 }
 
 // 和new一样的原因，不能直接使用监听，不然指针会指向之前的东西而不是再次回来后的

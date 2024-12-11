@@ -67,6 +67,12 @@
     padding: 0 10px;
 }
 
+/* 记录中的物品名称 */
+.recent-item-name {
+    cursor: pointer;  /* 显示手形光标 */
+    text-decoration: underline;  /* 添加下划线 */
+}
+
 /* 分页控件 */
 .pagination {
     display: flex;
