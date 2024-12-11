@@ -2,7 +2,7 @@ import os
 from datetime import datetime
 
 from flask import render_template, jsonify, request
-from sqlalchemy import func
+from sqlalchemy import func, or_
 
 from config import UPLOAD_FOLDER_IMAGES, UPLOAD_FOLDER_ATTACHMENTS
 from models import db, Item, Category, Location, ItemHistory
@@ -74,6 +74,8 @@ def submit_item(token):
     existing_item = Item.query.filter_by(user_id=user_id, name=item_name).first()
     if existing_item:
         return jsonify({'message': '物品已存在', 'code': 400})
+    if len(item_name) > 8:
+        return jsonify({'message': '名称不能超过8个字符', 'code': 400})
     # 查找物品的分类和位置，如果没有则报错
     category = Category.query.filter_by(user_id=user_id, name=item_category).first()
     if not category:
@@ -147,6 +149,8 @@ def submit_category(token):
     existing_category = Category.query.filter_by(user_id=user_id, name=category_name).first()
     if existing_category:
         return jsonify({'message': '类别已存在', 'code': 400})
+    if len(category_name) > 8:
+        return jsonify({'message': '名称不能超过8个字符', 'code': 400})
 
     # 创建类别记录
     category = Category(
@@ -174,6 +178,9 @@ def submit_location(token):
     existing_location = Location.query.filter_by(user_id=user_id, name=location_name).first()
     if existing_location:
         return jsonify({'message': '位置已存在', 'code': 400})
+    # 检查位置名称长度
+    if len(location_name) > 8:
+        return jsonify({'message': '名称不能超过8个字符', 'code': 400})
 
     # 保存上传的图片
     location_image_filename = None
@@ -300,6 +307,8 @@ def update_item_field(token, field):
 
     # 根据字段更新物品信息
     if field == 'name':
+        if len(new_value) > 8:
+            return jsonify({'message': '名称不能超过8个字符', 'code': 400})
         item.name = new_value
         action = "更新了物品的名称"
     elif field == 'description':
@@ -463,11 +472,9 @@ def search_items(token):
     query = request.args.get('query', '')  # 获取查询的文本
     page = request.args.get('page', 1, type=int)  # 获取当前页，默认为第一页
     per_page = request.args.get('per_page', 12, type=int)  # 获取每页展示的数量，默认为12
-    print("category_id:", category_id)
-    print("location_id:", location_id)
+
     # 初始化查询条件，首先需要时该用户的物品
     items_query = Item.query.filter(Item.user_id == user_id)
-
     # 分三种情况，当 category_id 不为 0 时，找出该类别的所有物品
     if category_id and category_id != 0:
         items_query = items_query.filter(Item.category_id == category_id).order_by(Item.expiry.asc())
@@ -479,8 +486,13 @@ def search_items(token):
     if not query:
         items_query = items_query.order_by(Item.expiry.asc())
     else:
-        # 如果有查询文本，则根据物品名称进行模糊查询
-        items_query = items_query.filter(Item.name.ilike(f"%{query}%")).order_by(Item.expiry.asc())
+        # 如果有查询文本，则在物品的名称和描述中进行模糊查询
+        items_query = items_query.filter(
+            or_(
+                Item.name.ilike(f"%{query}%"),
+                Item.description.ilike(f"%{query}%")
+            )
+        ).order_by(Item.expiry.asc())
 
     # 分页查询
     item_paginated = items_query.paginate(page=page, per_page=per_page, error_out=False)

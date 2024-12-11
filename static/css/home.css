@@ -164,7 +164,7 @@ body {
     color: #4CAF50;  /* 使用系统主色 */
     font-weight: bold;  /* 加粗字体 */
     text-shadow: 3px 3px 6px rgb(0, 0, 0, 0.3);  /* 添加文本阴影，增添立体感 */
-    animation: fadeIn 0.8s ease-in-out;  /* 添加渐现动画 */
+    animation: fadeIn 0.7s ease-in-out;  /* 添加渐现动画 */
     font-family: 'Arial', sans-serif;  /* 使用一种现代字体 */
 }
 

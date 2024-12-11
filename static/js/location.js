@@ -31,8 +31,8 @@ function fetchLocations(page) {
 
 // 显示位置名片
 function displayLocations(locations) {
-    const locationsContainer = document.getElementById('location-cards');  // 获取容器
-    locationsContainer.innerHTML = '';  // 清空现有内容
+    const locations_cards = document.getElementById('location-cards');  // 获取容器
+    locations_cards.innerHTML = '';  // 清空现有内容
 
     locations.forEach(location => {
         const locationCard = document.createElement('div');
@@ -47,7 +47,7 @@ function displayLocations(locations) {
             <img src="${location.image_url}" alt="${location.name}" class="location-image">
             <h4>${location.name}</h4>
         `;
-        locationsContainer.appendChild(locationCard);
+        locations_cards.appendChild(locationCard);
     });
 }
 

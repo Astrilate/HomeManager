@@ -3,9 +3,12 @@
     <div id="search-container" class="search-container">
         <!-- 搜索框 -->
         <div class="search-box">
-            <input type="text" id="search-input" placeholder="输入物品名称进行搜索"/>
+            <input type="text" id="search-input" placeholder="输入关键词搜索物品"/>
             <button id="search-btn" onclick="fetchItems(1)">搜索</button>
         </div>
+
+        <!-- 没有找到相关物品的提示信息 -->
+        <div id="no-results-message" class="no-results-message" style="display: none;">真没找到相关的物品...</div>
 
         <!-- 旋转等待图标 -->
         <div id="loading-spinner" class="loading-spinner" style="display: none;">

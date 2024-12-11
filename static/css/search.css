@@ -102,6 +102,7 @@
     padding: 15px;
     text-align: center;
     height: 100%;
+    animation: fadeIn 0.5s ease-in-out;  /* 比起上面，放在这里动画更加的平滑自然 */
 }
 
 /* 鼠标悬停时 */
@@ -142,47 +143,20 @@
     color: #28a745;  /* 鼠标悬停时改变标题颜色为绿色 */
 }
 
-/* 分页控件 */
-.pagination {
+/* 没有找到相关物品的提示信息样式 */
+.no-results-message {
     display: flex;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) translate(100px, 50px); /* 固定于屏幕中间，再往右下一点点 */
+    text-align: center;
     justify-content: center;
     align-items: center;
-    text-align: center;
-    position: absolute;  /* 绝对位置固定在容器底部 */
-    width: 100%;  /* 使分页控件宽度占满容器 */
-    left: 0;  /* 从左边开始，使用绝对位置脱离了文档流，只能如此定位 */
-    right: 0;  /* 从右边结束 */
-    margin: auto;  /* 让它居中 */
+    font-size: 36px;
+    color: #ff6347;  /* 红色字体 */
+    font-weight: bold;
+    z-index: 100; /* 确保提示信息在最上层 */
 }
 
-.page-btn {
-    padding: 8px 8px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 15px;
-    cursor: pointer;
-    font-size: 16px;
-    margin: 0 10px;
-    transition: background-color 0.2s ease;
-}
-
-.page-btn:hover {
-    background-color: #45a049;
-}
-
-.page-btn:disabled {
-    background-color: #ddd;
-    cursor: not-allowed;
-}
-
-.page-info {
-    font-size: 16px;
-    color: #333;
-}
-
-.error {
-    color: red;
-    text-align: center;
-    margin-top: 20px;
-}
+/* 分页控件直接用recent的那个*/

@@ -38,7 +38,7 @@
     align-items: center;
     padding: 60px;  /* 给按钮内部添加一些内边距 */
     position: relative;
-    animation: fadeIn 0.5s ease-in-out;  /* 添加渐现动画 */
+    animation: fadeIn 0.7s ease-in-out;  /* 添加渐现动画 */
 }
 
 /* 每个按钮的图标 */
@@ -73,7 +73,7 @@
     border-radius: 15px;  /* 更圆的边角 */
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2), 0 4px 6px rgba(0, 0, 0, 0.2);  /* 增强的阴影效果 */
     box-sizing: border-box;
-    animation: fadeIn 0.5s ease-in-out;  /* 添加渐现动画 */
+    animation: fadeIn 0.7s ease-in-out;  /* 添加渐现动画 */
     flex-grow: 1; /* 让表单容器可以增长填充剩余空间 */
 }
 

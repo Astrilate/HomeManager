@@ -22,6 +22,8 @@ function fetchItems(page) {
     const query = document.getElementById('search-input').value.trim();  // 获取搜索框中的内容
     // 显示加载旋转图标
     document.getElementById('loading-spinner').style.display = 'flex';
+    // 隐藏没有找到相关物品的提示信息
+    document.getElementById('no-results-message').style.display = 'none';
     fetch(`/search/items?category_id=${Category_id}&location_id=${Location_id}&query=${query}&page=${page}&per_page=12`, {
         method: 'GET',
         headers: {
@@ -33,6 +35,10 @@ function fetchItems(page) {
         // 隐藏加载旋转图标
         document.getElementById('loading-spinner').style.display = 'none';
         if (data.code === 200) {
+            if (data.data.length === 0) {
+                // 没有找到任何物品
+                document.getElementById('no-results-message').style.display = 'block';
+            }
             displayItems(data.data);  // 显示搜索结果
             totalPages = data.pages;  // 获取总页数
             currentPage = data.page;  // 获取当前页
