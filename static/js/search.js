@@ -6,10 +6,23 @@ function searchInit() {
 
 // 获取物品搜索结果
 function fetchItems(page) {
+    let Category_id = 0;
+    let Location_id = 0;
+    // 使用过后即可归零，保持始终最多只有一个是非零的情况
+    if (window.category_id != 0)
+    {
+        Category_id = window.category_id;
+        window.category_id = 0;
+    }
+    if (window.location_id != 0)
+    {
+        Location_id = window.location_id;
+        window.location_id = 0;
+    }
     const query = document.getElementById('search-input').value.trim();  // 获取搜索框中的内容
     // 显示加载旋转图标
     document.getElementById('loading-spinner').style.display = 'flex';
-    fetch(`/search/items?query=${query}&page=${page}&per_page=12`, {
+    fetch(`/search/items?category_id=${Category_id}&location_id=${Location_id}&query=${query}&page=${page}&per_page=12`, {
         method: 'GET',
         headers: {
             'Authorization': `Bearer ${localStorage.getItem('jwt')}` // 使用 JWT
@@ -69,7 +82,7 @@ function displayItems(items) {
 
 // 物品名称点击事件处理函数，打开对应物品的信息详情页
 function handleItemClick_search(itemId) {
-    loadContent("item", itemId);
+    loadContent("item", item_id=itemId);
 }
 
 // 和new一样的原因，不能直接使用监听，不然指针会指向之前的东西而不是再次回来后的
@@ -107,32 +120,5 @@ function updatePagination_search() {
         nextButton.disabled = true;  // 当前页是最后一页时，下一页按钮不可用
     } else {
         nextButton.disabled = false;
-    }
-}
-
-// 打印消息
-function displayMessage_search(message, type) {
-    const errorMessage = document.getElementById('error-message');
-    errorMessage.textContent = message;
-
-    if (type === 'success') {
-        errorMessage.classList.remove('error');
-        errorMessage.classList.add('success');
-    } else if (type === 'error') {
-        errorMessage.classList.remove('success');
-        errorMessage.classList.add('error');
-    }
-
-    // 消息显示 1 秒后消失
-    setTimeout(() => {
-        clearErrorMessage_search();
-    }, 1000);  // 1秒后清除提示信息
-}
-
-// 清除错误消息
-function clearErrorMessage_search() {
-    if(document.getElementById('error-message-search')){
-        document.getElementById('error-message-search').textContent = '';
-        document.getElementById('error-message-search').classList.remove('success', 'error');
     }
 }

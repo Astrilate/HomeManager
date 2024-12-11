@@ -1,0 +1,91 @@
+/* 类别容器样式 */
+.category-container {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);  /* 每行显示 3 列 */
+    gap: 30px;  /* 名片之间的间距 */
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;  /* 居中容器 */
+}
+
+/* 每个类别名片 */
+.category-card {
+    background-color: #fff;  /* 背景色为白色 */
+    border-radius: 15px;  /* 圆角 */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 4px 25px rgba(0, 0, 0, 0.15);  /* 立体感的阴影效果 */
+    overflow: hidden;
+    cursor: pointer;  /* 鼠标悬停时显示指针 */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;  /* 平滑过渡效果 */
+    padding: 20px;
+    text-align: center;
+    height: 100%;
+}
+
+/* 鼠标悬停时 */
+.category-card:hover {
+    transform: translateY(-10px);  /* 上浮效果 */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15), 0 8px 35px rgba(0, 0, 0, 0.2);  /* 增加阴影，带来更强的立体感 */
+}
+
+/* 类别名称 */
+.category-card h4 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 15px 0;
+    color: #333;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: color 0.2s ease;
+}
+
+/* 鼠标悬停时名称颜色变化 */
+.category-card:hover h4 {
+    color: #3498db;
+}
+
+/* 分页 */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+}
+
+/* 按钮 */
+.page-btn {
+    padding: 10px 20px;
+    margin: 0 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.page-btn:hover {
+    background-color: #0056b3;
+}
+
+/* 旋转等待图标 */
+.loading-spinner {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: none;
+    z-index: 9999;
+}
+
+.spinner {
+    border: 4px solid rgba(255, 255, 255, 0.3);
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

@@ -27,9 +27,11 @@ function requestCalculation() {
 // 记录已经加载的 JS 文件
 const loadedScripts = {};
 // 借用一下，到时候改回去
-function loadContent(page, item_id=1) {
+function loadContent(page, item_id=0, category_id=0, location_id=0) {
     const contentContainer = document.querySelector('.main-content');
-    window.currentItemId = item_id;
+    window.currentItemId = item_id;  // 任意地方跳转物品详情页的参数：物品id
+    window.category_id = category_id;  // 位置页跳转物品搜索页的参数：类别id
+    window.location_id = location_id;  // 位置页跳转物品搜索页的参数：位置id
     fetch('/load_page', {
         method: 'POST',
         headers: {

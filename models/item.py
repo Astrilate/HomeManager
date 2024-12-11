@@ -31,7 +31,7 @@ class Location(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.String(100), nullable=False)
     description = db.Column(db.String(255), nullable=False)
-    image_url = db.Column(db.String(255), nullable=True)  # 用于存储图片路径
+    image_url = db.Column(db.String(255), default="static/images/default_location.png", nullable=False)  # 用于存储图片路径
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)  # 外键，用户专用的家庭位置
 
 

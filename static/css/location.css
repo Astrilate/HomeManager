@@ -1,6 +1,46 @@
-.location-content {
-    background-color: lightpink;
+/* 位置名片容器 */
+.location-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);  /* 每行显示 3 列 */
+    gap: 40px;  /* 名片之间的间距 */
     padding: 20px;
-    font-size: 24px;
+    max-width: 1200px;
+    margin: 0 auto;  /* 居中容器 */
+}
+
+/* 每个位置名片 */
+.location-card {
+    background-color: #fff;  /* 背景色为白色 */
+    border-radius: 15px;  /* 圆角 */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 4px 25px rgba(0, 0, 0, 0.15);  /* 阴影效果 */
+    overflow: hidden;  /* 使图片和内容不超出边界 */
+    cursor: pointer;  /* 鼠标悬停时显示指针 */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;  /* 平滑过渡效果 */
+    padding: 15px;
     text-align: center;
+    height: 100%;
+}
+
+/* 鼠标悬停时 */
+.location-card:hover {
+    transform: translateY(-10px);  /* 上浮效果 */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15), 0 8px 35px rgba(0, 0, 0, 0.2);  /* 增强的阴影 */
+}
+
+/* 图片 */
+.location-card img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;  /* 确保图片填充并保持比例 */
+    border-radius: 10px;  /* 图片圆角 */
+}
+
+/* 名称 */
+.location-card h4 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 15px 0;
+    color: #333;  /* 使用深色字体 */
+    text-transform: uppercase;  /* 大写字母 */
+    letter-spacing: 1px;  /* 字母间距 */
 }

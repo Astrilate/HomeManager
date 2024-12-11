@@ -458,16 +458,29 @@ def update_attachment(token):
 @token_required
 def search_items(token):
     user_id = token['user_id']
+    category_id = request.args.get('category_id', type=int)  # 获取查询类别id
+    location_id = request.args.get('location_id', type=int)  # 获取查询位置id
     query = request.args.get('query', '')  # 获取查询的文本
     page = request.args.get('page', 1, type=int)  # 获取当前页，默认为第一页
     per_page = request.args.get('per_page', 12, type=int)  # 获取每页展示的数量，默认为12
+    print("category_id:", category_id)
+    print("location_id:", location_id)
+    # 初始化查询条件，首先需要时该用户的物品
+    items_query = Item.query.filter(Item.user_id == user_id)
 
-    # 如果查询内容为空，则默认查询该用户的所有物品，并按过期时间正序排列
+    # 分三种情况，当 category_id 不为 0 时，找出该类别的所有物品
+    if category_id and category_id != 0:
+        items_query = items_query.filter(Item.category_id == category_id).order_by(Item.expiry.asc())
+    # 当 location_id 不为 0 时，找出该位置的所有物品
+    if location_id and location_id != 0:
+        items_query = items_query.filter(Item.location_id == location_id).order_by(Item.expiry.asc())
+    # 当两个 id 同时为0时，就是普通的搜索而不是页面跳转的搜索
+    # 如果没有提供查询文本，则查询所有的东西，并按过期时间正序排列
     if not query:
-        items_query = Item.query.filter(Item.user_id == user_id).order_by(Item.expiry.asc())
+        items_query = items_query.order_by(Item.expiry.asc())
     else:
-        items_query = Item.query.filter(Item.name.ilike(f"%{query}%"), Item.user_id == user_id).order_by(
-            Item.expiry.asc())
+        # 如果有查询文本，则根据物品名称进行模糊查询
+        items_query = items_query.filter(Item.name.ilike(f"%{query}%")).order_by(Item.expiry.asc())
 
     # 分页查询
     item_paginated = items_query.paginate(page=page, per_page=per_page, error_out=False)
@@ -491,6 +504,69 @@ def search_items(token):
         'code': 200,
         'data': item_data,
         'total': item_paginated.total,
+        'pages': total_pages,
+        'page': current_page
+    })
+
+
+# 获取所有类别
+@main.route('/category', methods=['GET'])
+@token_required
+def list_categories(token):
+    user_id = token['user_id']
+    page = request.args.get('page', 1, type=int)  # 获取当前页，默认为第一页
+    per_page = request.args.get('per_page', 12, type=int)  # 每页显示的数量
+
+    # 获取用户的所有类别，分页查询
+    categories_query = Category.query.filter(Category.user_id == user_id).paginate(page=page, per_page=per_page,
+                                                                                   error_out=False)
+    categories = categories_query.items
+    total_pages = categories_query.pages
+    current_page = categories_query.page
+
+    # 格式化类别数据
+    category_data = [{
+        'id': category.id,
+        'name': category.name
+    } for category in categories]
+
+    # 返回响应数据
+    return jsonify({
+        'message': '查询成功',
+        'code': 200,
+        'data': category_data,
+        'total': categories_query.total,
+        'pages': total_pages,
+        'page': current_page
+    })
+
+
+# 获取所有位置
+@main.route('/locations', methods=['GET'])
+@token_required
+def get_locations(token):
+    user_id = token['user_id']
+    page = request.args.get('page', 1, type=int)
+    per_page = request.args.get('per_page', 12, type=int)
+
+    # 获取用户的所有位置并分页
+    locations_query = Location.query.filter_by(user_id=user_id).paginate(page=page, per_page=per_page, error_out=False)
+    locations = locations_query.items
+    total_pages = locations_query.pages
+    current_page = locations_query.page
+
+    # 格式化位置数据
+    location_data = [{
+        'id': location.id,
+        'name': location.name,
+        'image_url': location.image_url
+    } for location in locations]
+
+    return jsonify({
+        'message': '查询成功',
+        'code': 200,
+        'data': location_data,
+        'total': locations_query.total,
         'pages': total_pages,
         'page': current_page
     })
