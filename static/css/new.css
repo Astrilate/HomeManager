@@ -31,7 +31,7 @@
     border-radius: 12px;  /* 更圆的角度 */
     box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.1), -2px -2px 5px rgba(255, 255, 255, 0.3);  /* 增强的阴影效果 */
     cursor: pointer;
-    transition: all 0.2s ease;  /* 平滑的过渡效果 */
+    transition: all 0.3s ease;  /* 平滑的过渡效果 */
     display: flex;
     flex-direction: column;  /* 垂直排列图标和文字 */
     justify-content: center;

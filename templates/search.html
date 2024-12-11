@@ -1,3 +1,27 @@
 <div class="search-content">
-    <p>SEARCH</p>
+    <!-- 搜索区域 -->
+    <div id="search-container" class="search-container">
+        <!-- 搜索框 -->
+        <div class="search-box">
+            <input type="text" id="search-input" placeholder="输入物品名称进行搜索"/>
+            <button id="search-btn" onclick="fetchItems(1)">搜索</button>
+        </div>
+
+        <!-- 旋转等待图标 -->
+        <div id="loading-spinner" class="loading-spinner" style="display: none;">
+            <div class="spinner"></div>
+        </div>
+
+        <!-- 物品名片展示区域 -->
+        <div id="item-cards" class="item-cards"></div>
+
+        <!-- 分页控件 -->
+        <div id="pagination" class="pagination">
+            <button id="prev-page" class="page-btn" onclick="goToPreviousPage_search()">上一页</button>
+            <span id="page-info" class="page-info"></span>
+            <button id="next-page" class="page-btn" onclick="goToNextPage_search()">下一页</button>
+        </div>
+
+        <div class="error" id="error-message-search"></div>
+    </div>
 </div>

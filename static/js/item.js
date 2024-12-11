@@ -52,6 +52,9 @@ function getItemInfo() {
 
 // 日期格式化函数
 function formatDate(dateString) {
+    if (!dateString) {
+        return ''; // 如果日期为None或空，返回空字符串
+    }
     const date = new Date(dateString);
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, '0'); // 保证月份两位数

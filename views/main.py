@@ -451,3 +451,46 @@ def update_attachment(token):
             return jsonify({'message': '附件类型不支持', 'code': 400})
     else:
         return jsonify({'message': '未上传附件', 'code': 400})
+
+
+# 查询接口
+@main.route('/search/items', methods=['GET'])
+@token_required
+def search_items(token):
+    user_id = token['user_id']
+    query = request.args.get('query', '')  # 获取查询的文本
+    page = request.args.get('page', 1, type=int)  # 获取当前页，默认为第一页
+    per_page = request.args.get('per_page', 12, type=int)  # 获取每页展示的数量，默认为12
+
+    # 如果查询内容为空，则默认查询该用户的所有物品，并按过期时间正序排列
+    if not query:
+        items_query = Item.query.filter(Item.user_id == user_id).order_by(Item.expiry.asc())
+    else:
+        items_query = Item.query.filter(Item.name.ilike(f"%{query}%"), Item.user_id == user_id).order_by(
+            Item.expiry.asc())
+
+    # 分页查询
+    item_paginated = items_query.paginate(page=page, per_page=per_page, error_out=False)
+    items = item_paginated.items
+    total_pages = item_paginated.pages
+    current_page = item_paginated.page
+
+    # 格式化物品数据返回
+    item_data = [{
+        'id': item.id,
+        'name': item.name,
+        'category': Category.query.get(item.category_id).name,
+        'location': Location.query.get(item.location_id).name,
+        'image_url': item.image_url,
+        'expiry': item.expiry.isoformat() if item.expiry else None  # 格式化过期时间
+    } for item in items]
+
+    # 返回响应数据
+    return jsonify({
+        'message': '查询成功',
+        'code': 200,
+        'data': item_data,
+        'total': item_paginated.total,
+        'pages': total_pages,
+        'page': current_page
+    })

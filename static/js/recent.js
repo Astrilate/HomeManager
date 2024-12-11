@@ -21,11 +21,11 @@ function fetchItemHistory(page) {
             currentPage = data.page;       // 获取当前页
             updatePagination();             // 更新分页信息
         } else {
-            displayMessage('无法加载物品修改历史数据', 'error');
+            alert('无法加载物品修改历史数据');
         }
     })
     .catch(error => {
-        displayMessage('请求失败，请稍后再试', 'error');
+        alert('请求失败，请稍后再试');
     });
 }
 
@@ -92,19 +92,5 @@ function updatePagination() {
         nextButton.disabled = true;  // 当前页是最后一页时，下一页按钮不可用
     } else {
         nextButton.disabled = false;
-    }
-}
-
-// 显示消息
-function displayMessage(message, type) {
-    const errorMessage = document.getElementById('error-message');
-    errorMessage.textContent = message;
-
-    if (type === 'success') {
-        errorMessage.classList.remove('error');
-        errorMessage.classList.add('success');
-    } else if (type === 'error') {
-        errorMessage.classList.remove('success');
-        errorMessage.classList.add('error');
     }
 }
