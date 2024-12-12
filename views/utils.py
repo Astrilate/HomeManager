@@ -50,4 +50,5 @@ def allowed_image_file(filename):
 
 
 def allowed_attachment_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in {'txt', 'docx', 'xlsx', 'pptx', 'pdf', 'zip'}
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in {'txt', 'doc', 'docx', 'xls', 'xlsx', 'ppt',
+                                                                      'pptx', 'pdf', 'zip', 'rar'}

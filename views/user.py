@@ -24,16 +24,13 @@ def login():
     data = request.get_json()
     username = data.get('username')
     password = data.get('password')
-
     # 查找用户
     user = User.query.filter_by(username=username).first()
     if not user:
         return jsonify({'message': '用户不存在'}), 404
-
     # 验证密码
     if not bcrypt.check_password_hash(user.password, password):
         return jsonify({'message': '密码错误'}), 401
-
     # 生成JWT
     payload = {
         'user_id': user.id,
@@ -70,7 +67,6 @@ def register():
     new_user = User(username=username, password=hashed_password, email=email)
     db.session.add(new_user)
     db.session.commit()
-
     return jsonify({'message': '注册成功'}), 201
 
 
@@ -93,7 +89,6 @@ def get_user_info(token):
         'description': user.description,
         'image_url': user.image_url
     }
-
     return jsonify({'message': '信息获取成功', 'code': 200, 'data': user_info})
 
 
@@ -136,7 +131,6 @@ def update_user_field(token, field):
     else:
         return jsonify({'message': '无效属性', 'code': 400})
     db.session.commit()
-
     return jsonify({'message': f'{field}修改完成', 'code': 200})
 
 

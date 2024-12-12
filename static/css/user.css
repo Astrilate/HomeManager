@@ -81,6 +81,11 @@
     margin-left: 20px; /* 确保按钮有间距 */
 }
 
+/* 编辑按钮悬浮 */
+.edit-btn:hover{
+    background-color: #45a049;
+}
+
 /* 弹窗样式 */
 .edit-modal {
     position: fixed;
@@ -143,7 +148,7 @@
     margin-bottom: 10px;
 }
 
-/* 按钮*/
+/* 修改弹窗的按钮*/
 .modal-content button {
     padding: 8px 12px; /* 增加按钮内边距 */
     background-color: #4CAF50;
@@ -157,6 +162,31 @@
 /* 按钮悬浮 */
 .modal-content button:hover {
     background-color: #45a049;
+}
+
+/* 额外按钮行 */
+.extra-button-row {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    gap: 30px;
+}
+
+/* 额外按钮样式 */
+.extra-btn {
+    padding: 8px 16px;
+    background-color: #f44336; /* 红色 */
+    color: white;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    margin: 0 5px; /* 按钮之间留一些间隙 */
+    font-size: 16px;
+}
+
+/* 按钮悬浮 */
+.extra-btn:hover {
+    background-color: #d32f2f;
 }
 
 /* 成功消息样式 */

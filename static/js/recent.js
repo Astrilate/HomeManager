@@ -39,9 +39,16 @@ function displayItemHistory(history) {
         const recordRow = document.createElement('div');
         recordRow.classList.add('item-history-row');
 
+        let itemNameHTML;
+        if (record.is_deleted) {  // 如果已经被软删除则只显示文本
+            itemNameHTML = `<span>${record.item_name}</span>`;
+        } else {  // 如果没有被软删除，则添加点击事件
+            itemNameHTML = `<span class="recent-item-name" style="cursor: pointer;" onclick="handleItemClick('${record.item_id}')">${record.item_name}</span>`;
+        }
+
         // 将物品名称包裹在可点击的 span 标签中
         recordRow.innerHTML = `
-            <span class="recent-item-name" onclick="handleItemClick('${record.item_id}')">${record.item_name}</span>
+            ${itemNameHTML}
             <span>${record.category_name}</span>
             <span>${record.location_name}</span>
             <span>${record.action_type}</span>
@@ -54,7 +61,7 @@ function displayItemHistory(history) {
 
 // 物品名称点击事件处理函数，打开对应物品的信息详情页
 function handleItemClick(itemId) {
-    loadContent("item", itemId);
+    loadContent("item", itemId, 0, 0, 0);
 }
 
 // 和new一样的原因，不能直接使用监听，不然指针会指向之前的东西而不是再次回来后的

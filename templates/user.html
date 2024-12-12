@@ -18,27 +18,31 @@
         <div class="info-row">
             <span class="info-label">用户名:</span>
             <span class="info-value" id="username"></span>
-            <button class="edit-btn" onclick="editField('username')">修改</button>
+            <button class="edit-btn" onclick="editField_user('username')">修改</button>
         </div>
         <div class="info-row">
             <span class="info-label">密码:</span>
             <span class="info-value" id="password"></span>
-            <button class="edit-btn" onclick="editField('password')">修改</button>
+            <button class="edit-btn" onclick="editField_user('password')">修改</button>
         </div>
         <div class="info-row">
             <span class="info-label">描述:</span>
             <span class="info-value" id="description"></span>
-            <button class="edit-btn" onclick="editField('description')">修改</button>
+            <button class="edit-btn" onclick="editField_user('description')">修改</button>
         </div>
         <div class="info-row">
             <span class="info-label">邮箱:</span>
             <span class="info-value" id="email"></span>
-            <button class="edit-btn" onclick="editField('email')">修改</button>
+            <button class="edit-btn" onclick="editField_user('email')">修改</button>
         </div>
         <div class="info-row">
             <span class="info-label">电话:</span>
             <span class="info-value" id="telephone"></span>
-            <button class="edit-btn" onclick="editField('telephone')">修改</button>
+            <button class="edit-btn" onclick="editField_user('telephone')">修改</button>
+        </div>
+        <div class="extra-button-row">
+            <button class="extra-btn" onclick="expiredItems()">过期物品</button>
+            <button class="extra-btn" onclick="logout()">账号登出</button>
         </div>
     </div>
 </div>
@@ -49,7 +53,7 @@
         <h4>修改信息</h4>
         <textarea id="edit-value"></textarea>
         <div class="error" id="error-message-user"></div>
-        <button onclick="saveChanges()">提交</button>
-        <button onclick="closeModal()">取消</button>
+        <button onclick="saveChanges_user()">提交</button>
+        <button onclick="closeModal_user()">取消</button>
     </div>
 </div>

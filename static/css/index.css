@@ -45,11 +45,19 @@ h2 {
     border-radius: 12px; /* 增加圆角 */
     box-sizing: border-box;
     font-size: 16px;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;  /* 平滑过渡 */
+}
+
+/* 输入框聚焦时的效果 */
+.input-field:focus {
+    border-color: #4CAF50;  /* 获得焦点时变为绿色边框 */
+    box-shadow: 0 0 8px rgba(76, 175, 80, 0.7);  /* 输入框周围的绿色阴影 */
+    outline: none;  /* 去除默认的蓝色边框 */
 }
 
 /* 密码框容器 */
 .password-container {
-    position: relative;
+    position: relative;  /* 确保眼睛图标位置正确 */
 }
 
 /* 眼睛图标 */

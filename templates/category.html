@@ -1,7 +1,10 @@
-<div class="category-content">
+<div class="category-content" id="category-content">
     <div id="category-container" class="category-container">
         <!-- 类别展示区域 -->
         <div id="category-cards" class="category-cards"></div>
+
+        <!-- 没有找到相关物品的提示信息 -->
+        <div id="no-results-message" class="no-results-message" style="display: none;">竟然啥都没有...</div>
 
         <!-- 分页控件 -->
         <div id="pagination" class="pagination">
@@ -9,5 +12,26 @@
             <span id="page-info" class="page-info"></span>
             <button id="next-page" class="page-btn" onclick="goToNextPage_category()">下一页</button>
         </div>
+    </div>
+
+    <!-- 右键菜单 -->
+    <div id="context-menu_category" class="context-menu_category" style="display: none;">
+        <ul>
+            <li id="menu-detail_category">进入</li>
+            <li id="menu-update_name_category">名称</li>
+            <li id="menu-update_description_category">描述</li>
+            <li id="menu-delete_category">删除</li>
+        </ul>
+    </div>
+</div>
+
+<!-- 编辑弹窗 -->
+<div id="edit-modal" class="edit-modal">
+    <div class="modal-content">
+        <h4>修改信息</h4>
+        <textarea id="edit-value"></textarea>
+        <div class="error" id="error-message-category"></div>
+        <button onclick="saveChanges_category()">修改</button>
+        <button onclick="closeModal_category()">返回</button>
     </div>
 </div>

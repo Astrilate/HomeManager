@@ -142,7 +142,7 @@ function handleAttachmentUpload(event) {
 }
 
 // 编辑字段
-function editField(field) {
+function editField_item(field) {
     currentField = field;
     const inputField = document.getElementById(field);
 
@@ -160,7 +160,7 @@ function editField(field) {
         button.onclick = function () {
             const newValue = inputField.value;
             if (newValue) {
-                saveChanges();
+                saveChanges_item();
             }
         };
     }
@@ -173,7 +173,7 @@ function editField(field) {
 }
 
 // 保存修改
-function saveChanges() {
+function saveChanges_item() {
     let newValue;
 
     // 如果是日期字段
@@ -183,7 +183,7 @@ function saveChanges() {
         const button = document.querySelector(`#${currentField}`).nextElementSibling; // 获取按钮
         button.textContent = "修改";
         button.onclick = function () {
-        editField(currentField);
+        editField_item(currentField);
         };
     } else {
         newValue = document.getElementById("edit-value").value;
@@ -206,7 +206,7 @@ function saveChanges() {
         if (data.code === 200) { // 根据返回的 code 判断是否成功
             displayMessage_item("修改成功", "success");
             setTimeout(() => {
-                closeModal();
+                closeModal_item();
             }, 1000);
 
             // 更新显示的值
@@ -227,7 +227,7 @@ function saveChanges() {
 
 
 // 关闭弹窗
-function closeModal() {
+function closeModal_item() {
     document.getElementById("edit-modal").style.display = "none";
 }
 
@@ -248,12 +248,12 @@ function displayMessage_item(message, type) {
 
     // 消息显示 1 秒后消失
     setTimeout(() => {
-        clearErrorMessage();
+        clearErrorMessage_item();
     }, 1000);  // 1秒后清除提示信息
 }
 
 // 清除错误消息
-function clearErrorMessage() {
+function clearErrorMessage_item() {
     if(document.getElementById('error-message-item')){
         document.getElementById('error-message-item').textContent = '';
         document.getElementById('error-message-item').classList.remove('success', 'error');

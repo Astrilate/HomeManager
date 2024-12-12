@@ -61,7 +61,7 @@ function handleSubmit(event, formType) {
             // 如果提交成功，弹出提示框
             displayMessage_new(result.message, 'success', formType);
             setTimeout(() => {
-                loadContent('new');  // 跳回创建页面
+                loadContent('new', 0, 0, 0);  // 跳回创建页面
             }, 1000);
         } else {
             // 如果提交失败，显示错误消息
@@ -71,14 +71,14 @@ function handleSubmit(event, formType) {
     .catch(error => {
         displayMessage_new('请求失败，请稍后再试', 'error', formType);
         setTimeout(() => {
-            loadContent('new');  // 跳回创建页面
+            loadContent('new', 0, 0, 0);  // 跳回创建页面
         }, 1000);
     });
 }
 
 // 显示消息（成功/失败）
 function displayMessage_new(message, type, formType) {
-    // 每次显示错误消息时都重新获取 error-message 元素，不能定义为全局变量
+    // 每次显示错误消息时都重新获取 error-message 元素，不能定义为全局变量，这里是因为害怕指向的是
     var errorMessage;
     if (formType == 'item') errorMessage = document.getElementById('error-message1');  // 重新获取 DOM 元素
     else if (formType == 'category') errorMessage = document.getElementById('error-message2');  // 重新获取 DOM 元素

@@ -1,14 +1,14 @@
-<div class="search-content">
+<div class="search-content" id="search-content">
     <!-- 搜索区域 -->
     <div id="search-container" class="search-container">
         <!-- 搜索框 -->
-        <div class="search-box">
+        <div id="search-box" class="search-box">
             <input type="text" id="search-input" placeholder="输入关键词搜索物品"/>
             <button id="search-btn" onclick="fetchItems(1)">搜索</button>
         </div>
 
         <!-- 没有找到相关物品的提示信息 -->
-        <div id="no-results-message" class="no-results-message" style="display: none;">真没找到相关的物品...</div>
+        <div id="no-results-message" class="no-results-message" style="display: none;">竟然啥都没有...</div>
 
         <!-- 旋转等待图标 -->
         <div id="loading-spinner" class="loading-spinner" style="display: none;">
@@ -24,7 +24,13 @@
             <span id="page-info" class="page-info"></span>
             <button id="next-page" class="page-btn" onclick="goToNextPage_search()">下一页</button>
         </div>
+    </div>
 
-        <div class="error" id="error-message-search"></div>
+    <!-- 右键菜单 -->
+    <div id="context-menu" class="context-menu" style="display: none;">
+        <ul>
+            <li id="menu-detail">详情</li>
+            <li id="menu-delete">删除</li>
+        </ul>
     </div>
 </div>

@@ -2,7 +2,7 @@ import os
 from datetime import datetime
 
 from flask import render_template, jsonify, request
-from sqlalchemy import func, or_
+from sqlalchemy import func, or_, and_
 
 from config import UPLOAD_FOLDER_IMAGES, UPLOAD_FOLDER_ATTACHMENTS
 from models import db, Item, Category, Location, ItemHistory
@@ -36,16 +36,21 @@ def load_page(token):
 def calculate(token):
     user_id = token['user_id']
     # 计算物品的总价值
-    total_value = db.session.query(func.sum(Item.quantity * Item.price)).filter(Item.user_id == user_id).scalar() or 0
+    total_value = db.session.query(func.sum(Item.quantity * Item.price)).filter(Item.user_id == user_id,
+                                                                                Item.is_deleted == 0).scalar() or 0
     # 计算物品总数
-    total_items = db.session.query(func.count(Item.id)).filter(Item.user_id == user_id).scalar() or 0
+    total_items = db.session.query(func.count(Item.id)).filter(Item.user_id == user_id,
+                                                               Item.is_deleted == 0).scalar() or 0
     # 计算类别总数
-    total_categories = db.session.query(func.count(Category.id)).filter(Category.user_id == user_id).scalar() or 0
+    total_categories = db.session.query(func.count(Category.id)).filter(Category.user_id == user_id,
+                                                                        Category.is_deleted == 0).scalar() or 0
     # 计算位置总数
-    total_locations = db.session.query(func.count(Location.id)).filter(Location.user_id == user_id).scalar() or 0
+    total_locations = db.session.query(func.count(Location.id)).filter(Location.user_id == user_id,
+                                                                       Location.is_deleted == 0).scalar() or 0
     # 返回计算结果
     result = {
-        'result1': round(total_value, 1),  # 为了好显示，最好不要超过999.9
+        # 为了好显示，总价最好不要超过一百万，除去特别有钱的家庭外，一般家庭的家中物品总价超过一百万的概率较低
+        'result1': round(total_value, 1),
         'result2': total_items,
         'result3': total_categories,
         'result4': total_locations
@@ -71,16 +76,18 @@ def submit_item(token):
     item_attachment = request.files.get('item-attachment')  # 附件
 
     # 检查物品是否已存在
-    existing_item = Item.query.filter_by(user_id=user_id, name=item_name).first()
+    existing_item = Item.query.filter(Item.user_id == user_id, Item.name == item_name, Item.is_deleted == 0).first()
     if existing_item:
         return jsonify({'message': '物品已存在', 'code': 400})
     if len(item_name) > 8:
         return jsonify({'message': '名称不能超过8个字符', 'code': 400})
     # 查找物品的分类和位置，如果没有则报错
-    category = Category.query.filter_by(user_id=user_id, name=item_category).first()
+    category = Category.query.filter(Category.user_id == user_id, Category.name == item_category,
+                                     Category.is_deleted == 0).first()
     if not category:
         return jsonify({'message': '没有这个类别，请先创建', 'code': 400})
-    location = Location.query.filter_by(user_id=user_id, name=item_location).first()
+    location = Location.query.filter(Location.user_id == user_id, Location.name == item_location,
+                                     Location.is_deleted == 0).first()
     if not location:
         return jsonify({'message': '没有这个位置，请先创建', 'code': 400})
 
@@ -127,6 +134,9 @@ def submit_item(token):
     item_history = ItemHistory(
         user_id=user_id,
         item_id=item.id,
+        item_name=item.name,
+        category_name=item_category,
+        location_name=item_location,
         action_type="创建",
         action=f"创建了这个物品",
         changed_at=datetime.now()
@@ -146,7 +156,8 @@ def submit_category(token):
     category_description = request.form.get('category-description')
 
     # 检查类别是否已存在
-    existing_category = Category.query.filter_by(user_id=user_id, name=category_name).first()
+    existing_category = Category.query.filter(Category.user_id == user_id, Category.name == category_name,
+                                              Category.is_deleted == 0).first()
     if existing_category:
         return jsonify({'message': '类别已存在', 'code': 400})
     if len(category_name) > 8:
@@ -175,7 +186,8 @@ def submit_location(token):
     location_image = request.files.get('location-image')  # 图片
 
     # 检查位置是否已存在
-    existing_location = Location.query.filter_by(user_id=user_id, name=location_name).first()
+    existing_location = Location.query.filter(Location.user_id == user_id, Location.name == location_name,
+                                              Location.is_deleted == 0).first()
     if existing_location:
         return jsonify({'message': '位置已存在', 'code': 400})
     # 检查位置名称长度
@@ -215,34 +227,33 @@ def get_item_history(token):
     page = request.args.get('page', 1, type=int)
     per_page = request.args.get('per_page', 10, type=int)
 
-    # 查询当前用户的物品修改记录，连接查询 Item、Category 和 Location
-    item_history_query = (db.session.query(ItemHistory, Item, Category, Location)
-                          .join(Item, ItemHistory.item_id == Item.id)  # 连接 Item 表
-                          .join(Category, Item.category_id == Category.id)  # 连接 Category 表
-                          .join(Location, Item.location_id == Location.id)  # 连接 Location 表
-                          .filter(ItemHistory.user_id == user_id)
-                          .order_by(ItemHistory.changed_at.desc()))
+    # 查询当前用户的物品修改记录，经过修改历史记录表的结构后这里不需要进行连接查询了
+    item_history_query = ItemHistory.query.filter(ItemHistory.user_id == user_id).order_by(
+        ItemHistory.changed_at.desc())
 
     # 分页查询
     item_history_paginated = item_history_query.paginate(page=page, per_page=per_page, error_out=False)
-
     # 获取分页后的数据
     item_history = item_history_paginated.items
     total_pages = item_history_paginated.pages
     current_page = item_history_paginated.page
 
-    # 格式化数据返回
-    item_history_data = [{
-        'id': record.ItemHistory.id,
-        'user_id': record.ItemHistory.user_id,
-        'item_id': record.ItemHistory.item_id,
-        'action_type': record.ItemHistory.action_type,
-        'action': record.ItemHistory.action,
-        'changed_at': record.ItemHistory.changed_at.isoformat(),
-        'item_name': record.Item.name,
-        'category_name': record.Category.name,
-        'location_name': record.Location.name
-    } for record in item_history]
+    # 将每条记录放在一个同一的格式化后的列表中返回
+    item_history_data = []
+    for record in item_history:
+        # 查询Item表，判断item_id对应的物品是否已被删除
+        is_deleted = Item.query.filter(Item.id == record.item_id).first().is_deleted
+        # 格式化数据并添加到列表
+        item_history_data.append({
+            'item_id': record.item_id,
+            'item_name': record.item_name,
+            'category_name': record.category_name,
+            'location_name': record.location_name,
+            'action_type': record.action_type,
+            'action': record.action,
+            'changed_at': record.changed_at.isoformat(),
+            'is_deleted': is_deleted
+        })
 
     return jsonify({
         'code': 200,
@@ -264,7 +275,7 @@ def get_item_info(token):
     # 检验参数
     if not item_id:
         return jsonify({'message': '物品ID缺失', 'code': 400})
-    item = Item.query.filter_by(id=item_id, user_id=user_id).first()
+    item = Item.query.filter(Item.id == item_id, Item.user_id == user_id, Item.is_deleted == 0).first()
     if not item:
         return jsonify({'message': '物品不存在', 'code': 400})
 
@@ -301,45 +312,54 @@ def update_item_field(token, field):
     # 检验参数
     if not item_id:
         return jsonify({'message': '物品ID缺失', 'code': 400})
-    item = Item.query.filter_by(id=item_id, user_id=user_id).first()
+    item = Item.query.filter(Item.id == item_id, Item.user_id == user_id, Item.is_deleted == 0).first()
     if not item:
         return jsonify({'message': '物品不存在', 'code': 400})
 
     # 根据字段更新物品信息
     if field == 'name':
-        if len(new_value) > 8:
-            return jsonify({'message': '名称不能超过8个字符', 'code': 400})
-        item.name = new_value
-        action = "更新了物品的名称"
+        if Item.query.filter(Item.name == new_value, Item.user_id == user_id, Item.is_deleted == 0).first():
+            return jsonify({'message': '物品名称已存在', 'code': 400})
+        else:
+            if len(new_value) > 8:
+                return jsonify({'message': '名称不能超过8个字符', 'code': 400})
+            action = f"名称: [{item.name}]->[{new_value}]"
+            item.name = new_value
     elif field == 'description':
         item.description = new_value
         action = "更新了物品的描述"
     elif field == 'quantity':
         try:
             new_value = int(new_value)
+            if new_value < 0:
+                return jsonify({'message': '数量必须是正数', 'code': 400})
+            action = f"数量: [{item.quantity}]->[{new_value}]"
             item.quantity = new_value
-            action = "更新了物品的数量"
         except ValueError:
             return jsonify({'message': '数量必须是整数', 'code': 400})
     elif field == 'price':
         try:
             new_value = float(new_value)
+            if new_value < 0:
+                return jsonify({'message': '价格必须是正数', 'code': 400})
+            action = f"单价: [{item.price}]->[{new_value}]"
             item.price = new_value
-            action = "更新了物品的单价"
         except ValueError:
             return jsonify({'message': '价格必须是浮点数', 'code': 400})
     elif field == 'category':
-        category = Category.query.filter_by(name=new_value, user_id=user_id).first()
+        category = Category.query.filter(Category.name == new_value, Category.user_id == user_id,
+                                         Category.is_deleted == 0).first()
         if category:
+            action = f"类别: [{Category.query.filter(Category.id == item.category_id).first().name}]->[{new_value}]"
             item.category_id = category.id
-            action = "更新了物品的类别"
         else:
             return jsonify({'message': '类别不存在，请先创建', 'code': 400})
     elif field == 'location':
-        location = Location.query.filter_by(name=new_value, user_id=user_id).first()
+        location = Location.query.filter(Location.name == new_value, Location.user_id == user_id,
+                                         Location.is_deleted == 0).first()
         if location:
+            action = f"位置: [{Location.query.filter(Location.id == item.location_id).first().name}]->[{new_value}]"
             item.location_id = location.id
-            action = "更新了物品的位置"
         else:
             return jsonify({'message': '位置不存在，请先创建', 'code': 400})
     elif field == 'expiry':
@@ -355,6 +375,9 @@ def update_item_field(token, field):
     item_history = ItemHistory(
         user_id=user_id,
         item_id=item.id,
+        item_name=item.name,
+        category_name=Category.query.filter(Category.id == item.category_id, Category.is_deleted == 0).first().name,
+        location_name=Location.query.filter(Location.id == item.location_id, Location.is_deleted == 0).first().name,
         action_type="修改",
         action=action,
         changed_at=datetime.now()
@@ -375,7 +398,7 @@ def update_picture(token):
     # 检验参数
     if not item_id:
         return jsonify({'message': '物品ID缺失', 'code': 400})
-    item = Item.query.filter_by(id=item_id, user_id=user_id).first()
+    item = Item.query.filter(Item.id == item_id, Item.user_id == user_id, Item.is_deleted == 0).first()
     if not item:
         return jsonify({'message': '物品不存在', 'code': 400})
 
@@ -395,6 +418,11 @@ def update_picture(token):
             item_history = ItemHistory(
                 user_id=user_id,
                 item_id=item.id,
+                item_name=item.name,
+                category_name=Category.query.filter(Category.id == item.category_id,
+                                                    Category.is_deleted == 0).first().name,
+                location_name=Location.query.filter(Location.id == item.location_id,
+                                                    Location.is_deleted == 0).first().name,
                 action_type="修改",
                 action="更新了物品的图片",
                 changed_at=datetime.now()
@@ -423,7 +451,7 @@ def update_attachment(token):
     # 检验参数
     if not item_id:
         return jsonify({'message': '物品ID缺失', 'code': 400})
-    item = Item.query.filter_by(id=item_id, user_id=user_id).first()
+    item = Item.query.filter(Item.id == item_id, Item.user_id == user_id, Item.is_deleted == 0).first()
     if not item:
         return jsonify({'message': '物品不存在', 'code': 400})
 
@@ -444,6 +472,11 @@ def update_attachment(token):
             item_history = ItemHistory(
                 user_id=user_id,
                 item_id=item.id,
+                item_name=item.name,
+                category_name=Category.query.filter(Category.id == item.category_id,
+                                                    Category.is_deleted == 0).first().name,
+                location_name=Location.query.filter(Location.id == item.location_id,
+                                                    Location.is_deleted == 0).first().name,
                 action_type="修改",
                 action="更新了物品的附件",
                 changed_at=datetime.now()
@@ -462,25 +495,40 @@ def update_attachment(token):
         return jsonify({'message': '未上传附件', 'code': 400})
 
 
-# 查询接口
+# 核心查询接口
 @main.route('/search/items', methods=['GET'])
 @token_required
 def search_items(token):
     user_id = token['user_id']
     category_id = request.args.get('category_id', type=int)  # 获取查询类别id
     location_id = request.args.get('location_id', type=int)  # 获取查询位置id
+    expiry_type = request.args.get('expiry_type', type=int)  # 获取是否查询过期物品
     query = request.args.get('query', '')  # 获取查询的文本
     page = request.args.get('page', 1, type=int)  # 获取当前页，默认为第一页
     per_page = request.args.get('per_page', 12, type=int)  # 获取每页展示的数量，默认为12
 
     # 初始化查询条件，首先需要时该用户的物品
-    items_query = Item.query.filter(Item.user_id == user_id)
-    # 分三种情况，当 category_id 不为 0 时，找出该类别的所有物品
+    items_query = Item.query.filter(
+        and_(
+            Item.user_id == user_id,  # 符合该用户 id 的
+            Item.is_deleted == 0,  # 没有被删除的
+            or_(
+                Item.expiry > datetime.now(),  # 过期时间晚于现在
+                Item.expiry == None  # 或者没有登记过期时间，这里不能用 is None，不然判断不出来
+            )
+        )
+    )
+    # 分四种情况，当 category_id 不为 0 时，找出该类别的所有物品
     if category_id and category_id != 0:
         items_query = items_query.filter(Item.category_id == category_id).order_by(Item.expiry.asc())
     # 当 location_id 不为 0 时，找出该位置的所有物品
     if location_id and location_id != 0:
         items_query = items_query.filter(Item.location_id == location_id).order_by(Item.expiry.asc())
+    # 当 expiry_type 不为 0 时，查找所有过期物品
+    if expiry_type and expiry_type != 0:
+        items_query = Item.query.filter(Item.user_id == user_id, Item.expiry <= datetime.now(),
+                                        Item.is_deleted == 0).order_by(
+            Item.expiry.desc())
     # 当两个 id 同时为0时，就是普通的搜索而不是页面跳转的搜索
     # 如果没有提供查询文本，则查询所有的东西，并按过期时间正序排列
     if not query:
@@ -530,8 +578,9 @@ def list_categories(token):
     per_page = request.args.get('per_page', 12, type=int)  # 每页显示的数量
 
     # 获取用户的所有类别，分页查询
-    categories_query = Category.query.filter(Category.user_id == user_id).paginate(page=page, per_page=per_page,
-                                                                                   error_out=False)
+    categories_query = Category.query.filter(Category.user_id == user_id, Category.is_deleted == 0).paginate(page=page,
+                                                                                                             per_page=per_page,
+                                                                                                             error_out=False)
     categories = categories_query.items
     total_pages = categories_query.pages
     current_page = categories_query.page
@@ -562,7 +611,9 @@ def get_locations(token):
     per_page = request.args.get('per_page', 12, type=int)
 
     # 获取用户的所有位置并分页
-    locations_query = Location.query.filter_by(user_id=user_id).paginate(page=page, per_page=per_page, error_out=False)
+    locations_query = Location.query.filter(Location.user_id == user_id, Location.is_deleted == 0).paginate(page=page,
+                                                                                                            per_page=per_page,
+                                                                                                            error_out=False)
     locations = locations_query.items
     total_pages = locations_query.pages
     current_page = locations_query.page
@@ -582,3 +633,233 @@ def get_locations(token):
         'pages': total_pages,
         'page': current_page
     })
+
+
+# 删除物品
+@main.route('/delete/item', methods=['DELETE'])
+@token_required
+def delete_item(token):
+    user_id = token['user_id']
+    item_id = request.args.get('item_id', type=int)
+
+    # 检验参数
+    if not item_id:
+        return jsonify({'message': '物品ID缺失', 'code': 400})
+    item = Item.query.filter(Item.id == item_id, Item.is_deleted == 0).first()
+    if not item:
+        return jsonify({'message': '物品不存在', 'code': 400})
+
+    # 软删除该物品
+    item.is_deleted = 1
+    db.session.commit()
+
+    # 记录到最近历史记录中
+    item_history = ItemHistory(
+        user_id=user_id,
+        item_id=item.id,
+        item_name=item.name,
+        category_name=Category.query.filter(Category.id == item.category_id, Category.is_deleted == 0).first().name,
+        location_name=Location.query.filter(Location.id == item.location_id, Location.is_deleted == 0).first().name,
+        action_type="删除",
+        action="删除了这个物品",
+        changed_at=datetime.now()
+    )
+    db.session.add(item_history)
+    db.session.commit()
+
+    return jsonify({'message': '删除成功', 'code': 204})
+
+
+# 删除类别
+@main.route('/delete/category', methods=['DELETE'])
+@token_required
+def delete_category(token):
+    category_id = request.args.get('category_id', type=int)
+
+    # 检验参数
+    if not category_id:
+        return jsonify({'message': '类别ID缺失', 'code': 400})
+    category = Category.query.filter(Category.id == category_id, Category.is_deleted == 0).first()
+    if not category:
+        return jsonify({'message': '类别不存在', 'code': 400})
+
+    if Item.query.filter(Item.category_id == category_id, Item.is_deleted == 0).first():
+        return jsonify({'message': '该类别下还有物品，无法删除，别忘了过期的物品', 'code': 400})
+
+    # 软删除该类别
+    category.is_deleted = 1
+    db.session.commit()
+    return jsonify({'message': '删除成功', 'code': 204})
+
+
+# 删除位置
+@main.route('/delete/location', methods=['DELETE'])
+@token_required
+def delete_location(token):
+    location_id = request.args.get('location_id', type=int)
+
+    # 检验参数
+    if not location_id:
+        return jsonify({'message': '位置ID缺失', 'code': 400})
+    location = Location.query.filter(Location.id == location_id, Location.is_deleted == 0).first()
+    if not location:
+        return jsonify({'message': '位置不存在', 'code': 400})
+
+    if Item.query.filter(Item.location_id == location_id, Item.is_deleted == 0).first():
+        return jsonify({'message': '该位置下还有物品，无法删除，别忘了过期的物品', 'code': 400})
+
+    # 软删除该类别
+    location.is_deleted = 1
+    db.session.commit()
+    return jsonify({'message': '删除成功', 'code': 204})
+
+
+# 更新类别信息
+@main.route('/category-update/<field>', methods=['POST'])
+@token_required
+def update_category_field(token, field):
+    user_id = token['user_id']
+    category_id = request.get_json().get('category_id')
+    new_value = request.get_json().get('value')
+
+    # 检验参数
+    if not category_id:
+        return jsonify({'message': '类别ID缺失', 'code': 400})
+    category = Category.query.filter(Category.id == category_id, Category.user_id == user_id,
+                                     Category.is_deleted == 0).first()
+    if not category:
+        return jsonify({'message': '类别不存在', 'code': 400})
+
+    # 根据字段更新类别信息
+    if field == 'name':
+        if Category.query.filter(Category.name == new_value, Category.user_id == user_id,
+                                 Category.is_deleted == 0).first():
+            return jsonify({'message': '类别名称已存在', 'code': 400})
+        else:
+            if len(new_value) > 8:
+                return jsonify({'message': '名称不能超过8个字符', 'code': 400})
+            category.name = new_value
+    elif field == 'description':
+        category.description = new_value
+    else:
+        return jsonify({'message': '无效属性', 'code': 400})
+    db.session.commit()
+    return jsonify({'message': f'{field}修改完成', 'code': 200})
+
+
+# 更新位置信息
+@main.route('/location-update/<field>', methods=['POST'])
+@token_required
+def update_location_field(token, field):
+    user_id = token['user_id']
+    location_id = request.get_json().get('location_id')
+    new_value = request.get_json().get('value')
+
+    # 检验参数
+    if not location_id:
+        return jsonify({'message': '位置ID缺失', 'code': 400})
+    location = Location.query.filter(Location.id == location_id, Location.user_id == user_id,
+                                     Location.is_deleted == 0).first()
+    if not location:
+        return jsonify({'message': '位置不存在', 'code': 400})
+
+    # 根据字段更新位置信息
+    if field == 'name':
+        if Location.query.filter(Location.name == new_value, Location.user_id == user_id,
+                                 Location.is_deleted == 0).first():
+            return jsonify({'message': '位置名称已存在', 'code': 400})
+        else:
+            if len(new_value) > 8:
+                return jsonify({'message': '名称不能超过8个字符', 'code': 400})
+            location.name = new_value
+    elif field == 'description':
+        location.description = new_value
+    else:
+        return jsonify({'message': '无效属性', 'code': 400})
+    db.session.commit()
+    return jsonify({'message': f'{field}修改完成', 'code': 200})
+
+
+# 更新位置图片信息
+@main.route('/location-update/picture', methods=['POST'])
+@token_required
+def update_image(token):
+    user_id = token['user_id']
+    location_id = request.form.get('location_id')
+
+    # 检验参数
+    if not location_id:
+        return jsonify({'message': '位置ID缺失', 'code': 400})
+    location = Location.query.filter(Location.id == location_id, Location.user_id == user_id,
+                                     Location.is_deleted == 0).first()
+    if not location:
+        return jsonify({'message': '位置不存在', 'code': 400})
+
+    # 获取上传的文件
+    file = request.files['picture']
+    if file:
+        if allowed_image_file(file.filename):
+            file_extension = os.path.splitext(file.filename)[1]  # 提取扩展名
+            encoded_location_name = location.name.encode('utf-8').decode('utf-8')
+            location_image_filename = f"{user_id}_location_{encoded_location_name}{file_extension}"  # 用户ID_位置_位置名称，避免重复覆盖
+            location_image_filename = UPLOAD_FOLDER_IMAGES + location_image_filename
+            file.save(location_image_filename)
+            # 更新数据库中的信息
+            location.image_url = location_image_filename
+            db.session.commit()
+
+            return jsonify({
+                'message': '图片更新成功',
+                'code': 200,
+                'data': {'image_url': location_image_filename}
+            })
+        else:
+            return jsonify({'message': '图片类型不支持', 'code': 400})
+    else:
+        return jsonify({'message': '未上传图片', 'code': 400})
+
+
+# 获取类别信息
+@main.route('/category-info', methods=['GET'])
+@token_required
+def get_category_info(token):
+    user_id = token['user_id']
+    category_id = request.args.get('category_id')
+
+    # 检验参数
+    if not category_id:
+        return jsonify({'message': '类别ID缺失', 'code': 400})
+    category = Category.query.filter(Category.id == category_id, Category.user_id == user_id,
+                                     Category.is_deleted == 0).first()
+    if not category:
+        return jsonify({'message': '类别不存在', 'code': 400})
+
+    # 返回类别信息
+    category_info = {
+        'name': category.name,
+        'description': category.description,
+    }
+    return jsonify({'message': '信息获取成功', 'code': 200, 'data': category_info})
+
+
+# 获取位置信息
+@main.route('/location-info', methods=['GET'])
+@token_required
+def get_location_info(token):
+    user_id = token['user_id']
+    location_id = request.args.get('location_id')
+
+    # 检验参数
+    if not location_id:
+        return jsonify({'message': '位置ID缺失', 'code': 400})
+    location = Location.query.filter(Location.id == location_id, Location.user_id == user_id,
+                                     Location.is_deleted == 0).first()
+    if not location:
+        return jsonify({'message': '位置不存在', 'code': 400})
+
+    # 返回类别信息
+    location_info = {
+        'name': location.name,
+        'description': location.description,
+    }
+    return jsonify({'message': '信息获取成功', 'code': 200, 'data': location_info})

@@ -70,6 +70,36 @@
     color: #28a745;  /* 鼠标悬停时改变标题颜色为绿色 */
 }
 
+/* 右键菜单的样式 */
+.context-menu_category {
+    position: fixed; /* 固定在页面上的某个位置 */
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    z-index: 9999; /* 确保在所有元素之上 */
+    display: none; /* 默认隐藏 */
+    padding: 10px;
+    width: 100px;
+    border-radius: 15px;
+}
+
+.context-menu_category ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.context-menu_category ul li {
+    padding: 10px 20px;
+    padding-left: 23px;
+    cursor: pointer;
+    transition: background-color 0.5s ease;
+}
+
+.context-menu_category ul li:hover {
+    background-color: #f0f0f0;
+}
+
 /* 渐变效果 */
 @keyframes fadeIn {
     0% {

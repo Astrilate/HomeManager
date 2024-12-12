@@ -10,7 +10,7 @@ function requestCalculation() {
     .then(response => response.json())
     .then(data => {
         if (data.code === 200) {
-            document.getElementById('result1').textContent = '价值总和: ' + data.data.result1;
+            document.getElementById('result1').textContent = '价值: ' + data.data.result1;
             document.getElementById('result2').textContent = '物品数量: ' + data.data.result2;
             document.getElementById('result3').textContent = '类别数量: ' + data.data.result3;
             document.getElementById('result4').textContent = '位置数量: ' + data.data.result4;
@@ -26,12 +26,14 @@ function requestCalculation() {
 
 // 记录已经加载的 JS 文件
 const loadedScripts = {};
-// 借用一下，到时候改回去
-function loadContent(page, item_id=0, category_id=0, location_id=0) {
+// 公用切换页面函数
+function loadContent(page, item_id=0, category_id=0, location_id=0, expiry_type=0) {
     const contentContainer = document.querySelector('.main-content');
+    window.page = page;  // 记录当前的页面
     window.currentItemId = item_id;  // 任意地方跳转物品详情页的参数：物品id
     window.category_id = category_id;  // 位置页跳转物品搜索页的参数：类别id
     window.location_id = location_id;  // 位置页跳转物品搜索页的参数：位置id
+    window.expiry_type = expiry_type;  // 过期物品跳转物品搜索页的 bool 参数
     fetch('/load_page', {
         method: 'POST',
         headers: {

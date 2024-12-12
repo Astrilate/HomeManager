@@ -80,8 +80,8 @@ function uploadAvatar(file) {
     });
 }
 
-// 编辑字段
-function editField(field) {
+// 编辑字段，这些组件 css 的可以公用，但是js的不能共用，某些处理有所不同，比如日期的
+function editField_user(field) {
     currentField = field;
     const value = document.getElementById(field).innerText;
     document.getElementById("edit-value").value = value;
@@ -89,7 +89,7 @@ function editField(field) {
 }
 
 // 保存修改
-function saveChanges() {
+function saveChanges_user() {
     const newValue = document.getElementById("edit-value").value;
     // 发送修改请求到后端
     fetch(`/user-update/${currentField}`, {
@@ -105,7 +105,7 @@ function saveChanges() {
         if (data.code === 200) { // 根据返回的 code 判断是否成功
             displayMessage_user("修改成功", "success")
             setTimeout(() => {
-                closeModal();
+                closeModal_user();
             }, 1000);
             if (currentField != "password") document.getElementById(currentField).innerText = newValue;
         } else {
@@ -118,8 +118,20 @@ function saveChanges() {
 }
 
 // 关闭弹窗
-function closeModal() {
+function closeModal_user() {
     document.getElementById("edit-modal").style.display = "none";
+}
+
+// 添加两个按钮的点击事件处理函数
+function expiredItems() {
+    // 跳转到搜索页面
+    loadContent("search", 0, 0, 0, 1);
+}
+
+function logout() {
+    // 清除本地存储的 token，跳转到登录页面
+    localStorage.removeItem('jwt');
+    window.location.href = '/index';
 }
 
 // 显示消息（成功/失败）
@@ -139,12 +151,12 @@ function displayMessage_user(message, type) {
 
     // 消息显示 1 秒后消失
     setTimeout(() => {
-        clearErrorMessage();
+        clearErrorMessage_user();
     }, 1000);  // 1秒后清除提示信息
 }
 
 // 清除错误消息
-function clearErrorMessage() {
+function clearErrorMessage_user() {
     if (document.getElementById('error-message-user')) {
         document.getElementById('error-message-user').textContent = '';
         document.getElementById('error-message-user').classList.remove('success', 'error');
