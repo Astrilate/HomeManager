@@ -1,3 +1,143 @@
+// 初始化函数，进行事件监听
+function newInit() {
+    // 获取类别输入框和下拉菜单元素
+    const categoryInput = document.getElementById('item-category');
+    const categoryDropdown = document.getElementById('category-dropdown');
+    // 位置输入框功能
+    const locationInput = document.getElementById('item-location');
+    const locationDropdown = document.getElementById('location-dropdown');
+
+    // 为类别输入框添加focus事件监听器
+    if (categoryInput) {
+        categoryInput.addEventListener('focus', function() {
+            // 显示下拉菜单
+            categoryDropdown.style.display = 'block';
+            // 如果下拉菜单为空，则获取类别数据并填充
+            if (categoryDropdown.children.length === 0) {
+                fetchCategoriesAndPopulateDropdown();
+            }
+        });
+    }
+    if (locationInput) {
+        locationInput.addEventListener('focus', function() {
+            locationDropdown.style.display = 'block';
+            if (locationDropdown.children.length === 0) {
+                fetchLocationsAndPopulateDropdown();
+            }
+        });
+    }
+
+    // 点击页面其他地方时隐藏下拉菜单
+    document.addEventListener('click', function(event) {
+        // 检查点击的目标是否不是输入框且不是下拉菜单中的项
+        if (
+            event.target !== categoryInput &&
+            !(categoryDropdown.contains(event.target) && event.target.classList.contains('dropdown-item'))
+        ) {
+            categoryDropdown.style.display = 'none';
+        }
+        // 检查点击的目标是否不是位置输入框且不是位置下拉菜单中的项
+        if (
+            event.target !== locationInput &&
+            !(locationDropdown.contains(event.target) && event.target.classList.contains('dropdown-item'))
+        ) {
+            locationDropdown.style.display = 'none';
+        }
+    });
+
+    // 为窗口添加滚动事件监听器
+    window.addEventListener('scroll', function() {
+        // 检查滚动事件是否来自菜单内部
+        if (categoryDropdown.style.display === 'block' && !isScrollFromMenu(event)) {
+            categoryDropdown.style.display = 'none';
+        }
+        if (locationDropdown.style.display === 'block' && !isScrollFromMenu(event)) {
+            locationDropdown.style.display = 'none';
+        }
+    });
+    // 为菜单添加滚动事件监听器
+    categoryDropdown.addEventListener('scroll', function(event) {
+        // 阻止事件冒泡，避免触发窗口的滚动事件
+        event.stopPropagation();
+    });
+    // 为位置下拉菜单添加滚动事件监听器
+    locationDropdown.addEventListener('scroll', function(event) {
+        event.stopPropagation();
+    });
+}
+
+function isScrollFromMenu(event) {
+    // 检查事件目标是否是菜单或其子元素
+    const path = event.path || (event.composedPath && event.composedPath());
+    return path.some(element => element === document.getElementById('category-dropdown'));
+}
+
+// 获取类别数据并填充下拉菜单
+function fetchCategoriesAndPopulateDropdown() {
+    const categoryDropdown = document.getElementById('category-dropdown');
+    categoryDropdown.innerHTML = ''; // 清空现有内容
+
+    fetch('/menu/category', {
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.code === 200) {
+            const categories = data.data;
+            categories.forEach(category => {
+                const categoryItem = document.createElement('div');
+                categoryItem.classList.add('dropdown-item');
+                categoryItem.textContent = category;
+                categoryItem.addEventListener('click', () => {
+                    document.getElementById('item-category').value = category;
+                    categoryDropdown.style.display = 'none';
+                });
+                categoryDropdown.appendChild(categoryItem);
+            });
+        } else {
+            console.error('获取类别失败:', data.message);
+        }
+    })
+    .catch(error => {
+        console.error('获取类别失败:', error);
+    });
+}
+
+// 获取位置数据并填充下拉菜单
+function fetchLocationsAndPopulateDropdown() {
+    const locationDropdown = document.getElementById('location-dropdown');
+    locationDropdown.innerHTML = ''; // 清空现有内容
+
+    fetch('/menu/location', { // 假设后端有获取位置的接口
+        headers: {
+            'Authorization': `Bearer ${localStorage.getItem('jwt')}`
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.code === 200) {
+            const locations = data.data;
+            locations.forEach(location => {
+                const locationItem = document.createElement('div');
+                locationItem.classList.add('dropdown-item');
+                locationItem.textContent = location;
+                locationItem.addEventListener('click', () => {
+                    document.getElementById('item-location').value = location;
+                    locationDropdown.style.display = 'none';
+                });
+                locationDropdown.appendChild(locationItem);
+            });
+        } else {
+            console.error('获取位置失败:', data.message);
+        }
+    })
+    .catch(error => {
+        console.error('获取位置失败:', error);
+    });
+}
+
 // 显示对应的表单，隐藏其他表单和按钮
 function showForm(formType) {
     // 隐藏所有表单

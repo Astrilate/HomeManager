@@ -10,12 +10,6 @@ from . import main
 from .utils import token_required, allowed_image_file, allowed_attachment_file
 
 
-# 启动测试
-@main.route('/')
-def hello():
-    return "hello"
-
-
 # 载入首页
 @main.route('/home')
 def home():
@@ -121,8 +115,8 @@ def submit_item(token):
         category_id=category.id,
         location_id=location.id,
         user_id=user_id,
-        expiry=item_expiry,
-        warranty=item_warranty,
+        expiry=None if item_expiry == '' else item_expiry,
+        warranty=None if item_warranty == '' else item_warranty,
         image_url=item_image_filename,
         attachment_url=item_attachment_filename,
         created_at=datetime.now()
@@ -144,6 +138,30 @@ def submit_item(token):
     db.session.add(item_history)
     db.session.commit()
     return jsonify({'message': '物品创建成功', 'item_id': item.id, 'code': 201})
+
+
+# 获取所有类别
+@main.route('/menu/category', methods=['GET'])
+@token_required
+def menu_category(token):
+    user_id = token['user_id']
+    categories = Category.query.filter(Category.user_id == user_id, Category.is_deleted == 0)
+    category_data = []
+    for category in categories:
+        category_data.append(category.name)
+    return jsonify({'message': '类别获取成功', 'code': 200, 'data': category_data})
+
+
+# 获取所有位置
+@main.route('/menu/location', methods=['GET'])
+@token_required
+def menu_location(token):
+    user_id = token['user_id']
+    locations = Location.query.filter(Location.user_id == user_id, Location.is_deleted == 0)
+    location_data = []
+    for location in locations:
+        location_data.append(location.name)
+    return jsonify({'message': '位置获取成功', 'code': 200, 'data': location_data})
 
 
 # 类别创建
@@ -363,10 +381,10 @@ def update_item_field(token, field):
         else:
             return jsonify({'message': '位置不存在，请先创建', 'code': 400})
     elif field == 'expiry':
-        item.expiry = new_value
+        item.expiry = None if new_value == '' else new_value
         action = "更新了物品的过期时间"
     elif field == 'warranty':
-        item.warranty = new_value
+        item.warranty = None if new_value == '' else new_value
         action = "更新了物品的保修时间"
     else:
         return jsonify({'message': '无效属性', 'code': 400})
@@ -520,10 +538,12 @@ def search_items(token):
     )
     # 分四种情况，当 category_id 不为 0 时，找出该类别的所有物品
     if category_id and category_id != 0:
-        items_query = items_query.filter(Item.category_id == category_id).order_by(Item.expiry.asc())
+        items_query = items_query.filter(Item.category_id == category_id).order_by(
+            func.coalesce(Item.expiry, '9999-12-31').asc())
     # 当 location_id 不为 0 时，找出该位置的所有物品
     if location_id and location_id != 0:
-        items_query = items_query.filter(Item.location_id == location_id).order_by(Item.expiry.asc())
+        items_query = items_query.filter(Item.location_id == location_id).order_by(
+            func.coalesce(Item.expiry, '9999-12-31').asc())
     # 当 expiry_type 不为 0 时，查找所有过期物品
     if expiry_type and expiry_type != 0:
         items_query = Item.query.filter(Item.user_id == user_id, Item.expiry <= datetime.now(),
@@ -532,7 +552,7 @@ def search_items(token):
     # 当两个 id 同时为0时，就是普通的搜索而不是页面跳转的搜索
     # 如果没有提供查询文本，则查询所有的东西，并按过期时间正序排列
     if not query:
-        items_query = items_query.order_by(Item.expiry.asc())
+        items_query = items_query.order_by(func.coalesce(Item.expiry, '9999-12-31').asc())
     else:
         # 如果有查询文本，则在物品的名称和描述中进行模糊查询
         items_query = items_query.filter(
@@ -540,7 +560,7 @@ def search_items(token):
                 Item.name.ilike(f"%{query}%"),
                 Item.description.ilike(f"%{query}%")
             )
-        ).order_by(Item.expiry.asc())
+        ).order_by(func.coalesce(Item.expiry, '9999-12-31').asc())
 
     # 分页查询
     item_paginated = items_query.paginate(page=page, per_page=per_page, error_out=False)

@@ -165,3 +165,30 @@ label.required::before {
         transform: translateY(0);  /* 最终回到正常位置 */
     }
 }
+
+/* 下拉菜单样式 */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    width: 150px;
+    margin-top: -15px;
+    max-height: 200px; /* 设置最大高度 */
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 15px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    z-index: 9999; /* 确保在所有元素之上 */
+    overflow-y: auto; /* 添加垂直滚动条 */
+}
+
+/* 菜单项样式 */
+.dropdown-item {
+    padding: 10px 15px;
+    cursor: pointer;
+    border-bottom: 1px solid #eee;
+}
+
+/* 菜单项悬停样式 */
+.dropdown-item:hover {
+    background-color: #f5f5f5;
+}

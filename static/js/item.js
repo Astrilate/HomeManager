@@ -159,9 +159,7 @@ function editField_item(field) {
         // 保存按钮点击后，提交数据
         button.onclick = function () {
             const newValue = inputField.value;
-            if (newValue) {
-                saveChanges_item();
-            }
+            saveChanges_item();
         };
     }
     else {

@@ -131,7 +131,7 @@ function expiredItems() {
 function logout() {
     // 清除本地存储的 token，跳转到登录页面
     localStorage.removeItem('jwt');
-    window.location.href = '/index';
+    window.location.href = '/';
 }
 
 // 显示消息（成功/失败）

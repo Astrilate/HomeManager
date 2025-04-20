@@ -99,12 +99,22 @@ h2 {
     font-size: 14px;
 }
 
+/* 测试账号 */
+.tips {
+    text-align: center;
+    margin-top: 10px; /* 增加间距 */
+    margin-bottom: -40px;
+    color: #4CAF50;
+    font-size: 14px;
+}
+
 /* 成功消息样式 */
 .success {
     color: green;  /* 绿色字体 */
     font-size: 20px;
     text-align: center;
-    margin-top: 20px;
+    margin-top: 45px;
+    margin-bottom: -40px;
 }
 
 /* 错误消息样式 */
@@ -112,5 +122,6 @@ h2 {
     color: red;  /* 红色字体 */
     font-size: 20px;
     text-align: center;
-    margin-top: 20px;
+    margin-top: 45px;
+    margin-bottom: -40px;
 }

@@ -1,5 +1,6 @@
 import datetime
 import os
+import re
 
 import jwt
 from flask import jsonify, request, render_template
@@ -12,7 +13,7 @@ from .utils import token_required, allowed_image_file
 
 
 # 登录注册
-@user.route('/index')
+@user.route('/')
 def index():
     return render_template('index.html')
 
@@ -100,8 +101,6 @@ def update_user_field(token, field):
 
     # 获取请求体中的数据
     data = request.get_json()
-    if 'value' not in data:
-        return jsonify({'message': '修改的内容不能为空', 'code': 400})
     new_value = data['value']
 
     # 根据字段动态更新用户信息
@@ -111,20 +110,32 @@ def update_user_field(token, field):
 
     # 根据 field 动态设置对应字段
     if field == 'username':
+        if new_value == "":
+            return jsonify({'message': '用户名不能为空', 'code': 400})
         if User.query.filter_by(username=new_value).first():
             return jsonify({'message': '用户名已被注册', 'code': 400})
         user.username = new_value
     elif field == 'password':
+        if new_value == "":
+            return jsonify({'message': '新密码不能为空', 'code': 400})
         if bcrypt.check_password_hash(user.password, new_value):
             return jsonify({'message': '新密码与旧密码重复', 'code': 400})
         user.password = bcrypt.generate_password_hash(new_value).decode('utf-8')
     elif field == 'description':
         user.description = new_value
     elif field == 'email':
+        if new_value == "":
+            return jsonify({'message': '邮箱不能为空', 'code': 400})
+        EMAIL_REGEX = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'  # 邮箱正则式
+        if re.match(EMAIL_REGEX, new_value) is None:
+            return jsonify({'message': '邮箱格式有误', 'code': 400})
         if User.query.filter_by(email=new_value).first():
             return jsonify({'message': '邮箱已被注册', 'code': 400})
         user.email = new_value
     elif field == 'telephone':
+        PHONE_REGEX = r'^\d{7}$|^\d{8}$|^\d{11}$'  # 7位、8位、11位数字
+        if re.match(PHONE_REGEX, new_value) is None:
+            return jsonify({'message': '电话号码格式有误', 'code': 400})
         if User.query.filter_by(telephone=new_value).first():
             return jsonify({'message': '电话号码已被注册', 'code': 400})
         user.telephone = new_value

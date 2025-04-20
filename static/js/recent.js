@@ -53,10 +53,22 @@ function displayItemHistory(history) {
             <span>${record.location_name}</span>
             <span>${record.action_type}</span>
             <span>${record.action}</span>
-            <span>${new Date(record.changed_at).toLocaleString()}</span>
+            <span>${ensureTwoDigits(new Date(record.changed_at).toLocaleString())}</span>
         `;
         historyList.appendChild(recordRow);
     });
+}
+
+function ensureTwoDigits(dateStr) {
+    // 将日期字符串按空格分割为日期部分和时间部分
+    const [datePart, timePart] = dateStr.split(" ");
+    // 将日期部分按斜杠分割为年、月、日
+    const [year, month, day] = datePart.split("/");
+    // 确保月份和日期是两位数
+    const formattedMonth = month.padStart(2, '0');
+    const formattedDay = day.padStart(2, '0');
+    // 重新拼接为完整的日期时间字符串
+    return `${year}/${formattedMonth}/${formattedDay} ${timePart}`;
 }
 
 // 物品名称点击事件处理函数，打开对应物品的信息详情页
