@@ -44,32 +44,6 @@ function newInit() {
             locationDropdown.style.display = 'none';
         }
     });
-
-    // 为窗口添加滚动事件监听器
-    window.addEventListener('scroll', function() {
-        // 检查滚动事件是否来自菜单内部
-        if (categoryDropdown.style.display === 'block' && !isScrollFromMenu(event)) {
-            categoryDropdown.style.display = 'none';
-        }
-        if (locationDropdown.style.display === 'block' && !isScrollFromMenu(event)) {
-            locationDropdown.style.display = 'none';
-        }
-    });
-    // 为菜单添加滚动事件监听器
-    categoryDropdown.addEventListener('scroll', function(event) {
-        // 阻止事件冒泡，避免触发窗口的滚动事件
-        event.stopPropagation();
-    });
-    // 为位置下拉菜单添加滚动事件监听器
-    locationDropdown.addEventListener('scroll', function(event) {
-        event.stopPropagation();
-    });
-}
-
-function isScrollFromMenu(event) {
-    // 检查事件目标是否是菜单或其子元素
-    const path = event.path || (event.composedPath && event.composedPath());
-    return path.some(element => element === document.getElementById('category-dropdown'));
 }
 
 // 获取类别数据并填充下拉菜单

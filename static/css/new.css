@@ -177,7 +177,6 @@ label.required::before {
     border: 1px solid #ccc;
     border-radius: 15px;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
-    z-index: 9999; /* 确保在所有元素之上 */
     overflow-y: auto; /* 添加垂直滚动条 */
 }
 
