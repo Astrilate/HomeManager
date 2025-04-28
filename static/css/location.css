@@ -2,31 +2,31 @@
 .location-container {
     width: 60%;
     margin: 0 auto;
-    padding-top: 20px;
-    padding-bottom: 70px;
+    padding-top: 1.33vw;
+    padding-bottom: 5.33vw;
     flex-direction: column;
     position: relative;  /* 使分页定位相对于该容器 */
-    min-height: 100vh;
+    min-height: 50vw;
 }
 
 .location-cards {
     display: grid;
     grid-template-columns: repeat(3, 1fr);  /* 每行显示 3 列 */
-    gap: 60px;  /* 增加名片之间的间距 */
-    padding: 20px;  /* 为了让网格不直接贴边 */
-    max-width: 1200px;
+    gap: 4vw;  /* 增加名片之间的间距 */
+    padding: 1.33vw;  /* 为了让网格不直接贴边 */
+    max-width: 80vw;
     margin: 0 auto;  /* 居中容器 */
 }
 
 /* 每个类别名片 */
 .location-card {
     background-color: #fff;  /* 背景色为白色 */
-    border-radius: 15px;  /* 圆角 */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 4px 25px rgba(0, 0, 0, 0.15);  /* 立体感的阴影效果 */
+    border-radius: 1vw;  /* 圆角 */
+    box-shadow: 0 0.27vw 0.8vw rgba(0, 0, 0, 0.1), 0 0.27vw 1.67vw rgba(0, 0, 0, 0.15);  /* 立体感的阴影效果 */
     overflow: hidden;  /* 使图片和内容不超出边界 */
     cursor: pointer;  /* 鼠标悬停时显示指针 */
     transition: transform 0.3s ease, box-shadow 0.3s ease;  /* 平滑过渡效果 */
-    padding: 15px;
+    padding: 1vw;
     text-align: center;
     height: 100%;
     animation: fadeIn 0.5s ease-in-out;  /* 比起上面，放在这里动画更加的平滑自然 */
@@ -34,26 +34,26 @@
 
 /* 鼠标悬停时 */
 .location-card:hover {
-    transform: translateY(-10px);  /* 上浮效果 */
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 8px 35px rgba(0, 0, 0, 0.3);  /* 增加阴影，带来更强的立体感 */
+    transform: translateY(-0.67vw);  /* 上浮效果 */
+    box-shadow: 0 0.53vw 1.33vw rgba(0, 0, 0, 0.3), 0 0.53vw 2.33vw rgba(0, 0, 0, 0.3);  /* 增加阴影，带来更强的立体感 */
 }
 
 /* 图片 */
 .location-card img {
     width: 100%;
-    height: 180px;  /* 更高的图片高度 */
+    height: 12vw;  /* 更高的图片高度 */
     object-fit: cover;  /* 确保图片填充并保持比例 */
-    border-radius: 10px;  /* 图片圆角 */
+    border-radius: 0.67vw;  /* 图片圆角 */
 }
 
 /* 类别名称 */
 .location-card h4 {
-    font-size: 20px;
+    font-size: 1.33vw;
     font-weight: 600;
-    margin: 15px 0;
+    margin: 1vw 0;
     color: #333;  /* 使用深色字体 */
     text-transform: uppercase;  /* 大写字母 */
-    letter-spacing: 1px;  /* 字母间距 */
+    letter-spacing: 0.07vw;  /* 字母间距 */
     transition: color 0.2s ease;  /* 字体颜色平滑过渡 */
 }
 
@@ -66,13 +66,13 @@
 .context-menu_location {
     position: fixed; /* 固定在页面上的某个位置 */
     background-color: #fff;
-    border: 1px solid #ccc;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    border: 0.07vw solid #ccc;
+    box-shadow: 0 0.4vw 0.8vw rgba(0, 0, 0, 0.2);
     z-index: 9999; /* 确保在所有元素之上 */
     display: none; /* 默认隐藏 */
-    padding: 10px;
-    width: 100px;
-    border-radius: 15px;
+    padding: 0.67vw;
+    width: 6.67vw;
+    border-radius: 1vw;
 }
 
 .context-menu_location ul {
@@ -82,8 +82,8 @@
 }
 
 .context-menu_location ul li {
-    padding: 10px 20px;
-    padding-left: 23px;
+    padding: 0.67vw 1.33vw;
+    padding-left: 1.53vw;
     cursor: pointer;
     transition: background-color 0.5s ease;
 }
@@ -96,7 +96,7 @@
 @keyframes fadeIn {
     0% {
         opacity: 0;
-        transform: translateY(-100px);
+        transform: translateY(-6.67vw);
     }
     100% {
         opacity: 1;

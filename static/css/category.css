@@ -2,30 +2,30 @@
 .category-container {
     width: 65%;
     margin: 0 auto;
-    padding-top: 20px;
-    padding-bottom: 50px;
+    padding-top: 1.3vw;
+    padding-bottom: 6.66vw;
     flex-direction: column;
     position: relative;  /* 使分页定位相对于该容器 */
-    min-height: 100vh;
+    min-height: 75vh;
 }
 
 .category-cards {
     display: grid;
     grid-template-columns: repeat(3, 1fr);  /* 每行显示 3 列 */
-    gap: 60px;  /* 增加名片之间的间距 */
-    max-width: 1200px;
+    gap: 4vw;  /* 增加名片之间的间距 */
+    max-width: 80vw;
     margin: 0 auto;  /* 居中容器 */
 }
 
 /* 每个类别名片 */
 .category-card {
     background-color: #fff;  /* 背景色为白色 */
-    border-radius: 15px;  /* 圆角 */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1), 0 4px 25px rgba(0, 0, 0, 0.15);  /* 立体感的阴影效果 */
+    border-radius: 1vw;  /* 圆角 */
+    box-shadow: 0vw 0.26vw 0.8vw rgba(0, 0, 0, 0.1), 0vw 0.26vw 1.66vw rgba(0, 0, 0, 0.15);  /* 立体感的阴影效果 */
     overflow: hidden;  /* 使图片和内容不超出边界 */
     cursor: pointer;  /* 鼠标悬停时显示指针 */
     transition: transform 0.3s ease, box-shadow 0.3s ease;  /* 平滑过渡效果 */
-    padding: 15px;
+    padding: 1vw;
     text-align: center;
     height: 100%;
     position: relative;  /* 用于定位标签 */
@@ -34,16 +34,16 @@
 
 /* 类别名称 */
 .category-card h4 {
-    font-size: 20px;
+    font-size: 1.33vw;
     font-weight: 600;
-    margin: 10px 0;
+    margin: 0.66vw 0vw;
     color: #333;  /* 使用深色字体 */
     text-transform: uppercase;  /* 大写字母 */
-    letter-spacing: 1px;  /* 字母间距 */
+    letter-spacing: 0.066vw;  /* 字母间距 */
     transition: color 0.2s ease;  /* 字体颜色平滑过渡 */
     display: block;  /* 使标题变为块级元素，支持换行 */
     width: 100%;  /* 确保标题占满父元素的宽度 */
-    padding-left: 30px;  /* 给图标留出位置 */
+    padding-left: 2vw;  /* 给图标留出位置 */
     text-align: center;  /* 文字左对齐 */
     word-wrap: break-word;  /* 自动换行 */
     white-space: normal;  /* 允许文本换行 */
@@ -52,7 +52,7 @@
 /* 图标样式 */
 .category-card h4 i {
     position: absolute;
-    left: 15px;  /* 图标位于名片左侧 */
+    left: 1vw;  /* 图标位于名片左侧 */
     top: 50%;
     transform: translateY(-50%);  /* 确保图标垂直居中 */
     font-size: 1.4em;  /* 调整图标大小 */
@@ -61,8 +61,8 @@
 
 /* 鼠标悬停时 */
 .category-card:hover {
-    transform: translateY(-10px);  /* 上浮效果 */
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3), 0 8px 35px rgba(0, 0, 0, 0.3);  /* 增加阴影，带来更强的立体感 */
+    transform: translateY(-0.66vw);  /* 上浮效果 */
+    box-shadow: 0vw 0.53vw 1.3vw rgba(0, 0, 0, 0.3), 0vw 0.53vw 2.33vw rgba(0, 0, 0, 0.3);  /* 增加阴影，带来更强的立体感 */
 }
 
 /* 鼠标悬停时名字的颜色变化（改为绿色） */
@@ -74,13 +74,13 @@
 .context-menu_category {
     position: fixed; /* 固定在页面上的某个位置 */
     background-color: #fff;
-    border: 1px solid #ccc;
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    border: 0.06vw solid #ccc;
+    box-shadow: 0vw 0.4vw 0.8vw rgba(0, 0, 0, 0.2);
     z-index: 9999; /* 确保在所有元素之上 */
     display: none; /* 默认隐藏 */
-    padding: 10px;
-    width: 100px;
-    border-radius: 15px;
+    padding: 0.66vw;
+    width: 6.66vw;
+    border-radius: 1vw;
 }
 
 .context-menu_category ul {
@@ -90,8 +90,8 @@
 }
 
 .context-menu_category ul li {
-    padding: 10px 20px;
-    padding-left: 23px;
+    padding: 0.66vw 1.33vw;
+    padding-left: 1.53vw;
     cursor: pointer;
     transition: background-color 0.5s ease;
 }
@@ -104,7 +104,7 @@
 @keyframes fadeIn {
     0% {
         opacity: 0;
-        transform: translateY(-100px);
+        transform: translateY(-6.66vw);
     }
     100% {
         opacity: 1;
