@@ -22,8 +22,8 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: rgb(76, 175, 80);
-    color: rgb(76, 175, 80);
+    background-color: #5BA68A;
+    color: #BCE7D8;
     padding: 20px;
     position: fixed;
     top: 0;
@@ -42,7 +42,7 @@ body {
     text-align: center;
     flex: 1;  /* 占顶部栏的左侧三分之一 */
     text-decoration: none;  /* 去掉默认的链接下划线 */
-    color: white;  /* 保持文字颜色与原来一致 */
+    color: #F8F4E3;  /* 保持文字颜色与原来一致 */
 }
 
 /* 大小和字体样式 */
@@ -66,8 +66,8 @@ body {
 /* 按钮样式 */
 .top-buttons button {
     padding: 20px 5px;
-    background-color: #fff;
-    color: rgb(76, 175, 80);
+    background-color: #F8F4E3;
+    color: #5BA68A;
     border: none;
     border-radius: 30px;
     cursor: pointer;
@@ -79,8 +79,8 @@ body {
 
 /* 按钮悬停效果 */
 .top-buttons button:hover {
-    background-color: #e0e0e0;
-    transform: scale(1.1);  /* 悬停时按钮稍微放大 */
+    background-color: #F0EBE0;
+    transform: scale(1.05);  /* 悬停时按钮稍微放大 */
 }
 
 /* 左侧栏样式 */
@@ -96,7 +96,7 @@ body {
     flex-direction: column;  /* 垂直排列 */
     justify-content: space-between;  /* 均匀分布 */
     border-right: 6px solid #dcdcdc;  /* 添加灰色分隔线 */
-    background-color: rgb(240, 240, 240);  /* 设置灰色背景 */
+    background-color: #F8F4E3;  /* 设置灰色背景 */
 }
 
 /* 左侧栏中的每个框样式 */
@@ -106,7 +106,7 @@ body {
     margin-top: 10px;
     margin-bottom: 10px;
     background-color: rgb(76, 175, 80);
-    color: white;
+    color: #F8F4E3;
     border-radius: 15px;  /* 更圆润的角 */
     text-align: center;
     font-size: 20px;
@@ -118,7 +118,7 @@ body {
     /* 嵌入效果（模拟凹陷） */
     box-shadow: inset 0px 4px 10px rgba(0, 0, 0, 0.2),  /* 内阴影，给人嵌入的感觉 */
                 0px 4px 10px rgba(0, 0, 0, 0.1);  /* 外阴影，增强层次感 */
-    background: linear-gradient(145deg, #66bb6a, #388e3c);  /* 渐变效果 */
+    background: linear-gradient(#5BA68A);  /* 渐变效果 */
     transition: transform 0.2s ease, box-shadow 0.3s ease, background-color 0.3s ease;  /* 平滑过渡 */
 }
 
@@ -136,13 +136,13 @@ body {
     /* 添加阴影效果 */
     box-shadow: inset 0px 4px 10px rgba(0, 0, 0, 0.2),  /* 内阴影，给人嵌入的感觉 */
                 0px 4px 8px rgba(0, 0, 0, 0.1);  /* 外阴影，增强层次感 */
-    background: linear-gradient(145deg, #66bb6a, #388e3c);  /* 渐变效果 */
+    background: linear-gradient(#5BA68A);  /* 渐变效果 */
 }
 
 /* 请求计算框的悬停效果 */
 #calculateBtn:hover {
     background-color: #388E3C;  /* 悬停时背景颜色稍微加深，明显一点 */
-    transform: scale(1.1);  /* 悬停时按钮稍微放大 */
+    transform: scale(1.05);  /* 悬停时按钮稍微放大 */
     box-shadow: inset 0px 8px 16px rgba(0, 0, 0, 0.3),  /* 更强的内阴影效果 */
                 0px 8px 16px rgba(0, 0, 0, 0.2);  /* 悬停时的外阴影加深 */
 }
@@ -161,7 +161,7 @@ body {
     justify-content: center;  /* 水平居中 */
     margin-top: 20vh;
     font-size: 64px;  /* 字体大小 */
-    color: #4CAF50;  /* 使用系统主色 */
+    color: #F8F4E3;  /* 使用系统主色 */
     font-weight: bold;  /* 加粗字体 */
     text-shadow: 3px 3px 6px rgb(0, 0, 0, 0.3);  /* 添加文本阴影，增添立体感 */
     animation: fadeIn 0.7s ease-in-out;  /* 添加渐现动画 */

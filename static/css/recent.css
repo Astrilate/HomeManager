@@ -89,7 +89,7 @@
 
 .page-btn {
     padding: 8px 8px;
-    background-color: #4CAF50;
+    background-color: #FFCBA4;
     color: white;
     border: none;
     border-radius: 15px;
@@ -100,7 +100,7 @@
 }
 
 .page-btn:hover {
-    background-color: #45a049;
+    background-color: #E9967A;
 }
 
 .page-btn:disabled {
