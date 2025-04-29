@@ -14,14 +14,16 @@ function requestCalculation() {
             document.getElementById('result2').textContent = '物品数量: ' + data.data.result2;
             document.getElementById('result3').textContent = '类别数量: ' + data.data.result3;
             document.getElementById('result4').textContent = '位置数量: ' + data.data.result4;
+        } else if (data.code === 401) {
+            // 检测到 401 状态码，表示 token 无效
+            localStorage.removeItem('jwt'); // 清除无效的 token
+            alert("token无效，请重新登录，点击确定后将跳转到登录界面")
+            window.location.href = '/'; // 重定向到登录页面
+            return Promise.reject('Unauthorized'); // 中断 Promise 链，防止后续的 .then() 执行
         } else {
             alert('计算失败');
         }
     })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('请求计算时出错');
-    });
 }
 
 // 记录已经加载的 JS 文件
@@ -42,7 +44,17 @@ function loadContent(page, item_id=0, category_id=0, location_id=0, expiry_type=
         },
         body: `page=${page}`,
     })
-    .then(response => response.text())
+    .then(response => {
+        if (response.status === 401) {
+            // 检测到 401 状态码，表示 token 无效
+            localStorage.removeItem('jwt'); // 清除无效的 token
+            alert("token无效，请重新登录，点击确定后将跳转到登录界面")
+            window.location.href = '/'; // 重定向到登录页面
+            return Promise.reject('Unauthorized'); // 中断 Promise 链，防止后续的 .then() 执行
+        }
+        // 如果状态码不是 401，则继续处理响应
+        return response.text();
+    })
     .then(html => {
         // 更新核心区域内容
         contentContainer.innerHTML = html;

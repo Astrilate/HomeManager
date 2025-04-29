@@ -10,6 +10,7 @@
     display: none;  /* 隐藏滚动条 */
 }
 
+/* 核心区域背景样式 */
 body {
     background-image: url('../images/background.jpg');  /* 设置背景图片 */
     background-size: cover;  /* 背景图片覆盖整个页面 */
@@ -51,6 +52,7 @@ body {
     font-weight: bold;
 }
 
+/* 大小和字体样式 */
 .home-title-small {
     font-size: 1.55vw;  /* 较小的字体 */
 }
@@ -117,7 +119,7 @@ body {
     /* 嵌入效果（模拟凹陷） */
     box-shadow: inset 0vw 0.26vw 0.65vw rgba(0, 0, 0, 0.2),  /* 内阴影，给人嵌入的感觉 */
                 0vw 0.26vw 0.65vw rgba(0, 0, 0, 0.1);  /* 外阴影，增强层次感 */
-    background: linear-gradient(#5BA68A);  /* 渐变效果 */
+    background-color: #5BA68A;
     transition: transform 0.2s ease, box-shadow 0.3s ease, background-color 0.3s ease;  /* 平滑过渡 */
 }
 
@@ -134,12 +136,11 @@ body {
     /* 添加阴影效果 */
     box-shadow: inset 0vw 0.26vw 0.65vw rgba(0, 0, 0, 0.2),  /* 内阴影，给人嵌入的感觉 */
                 0vw 0.26vw 0.65vw rgba(0, 0, 0, 0.1);  /* 外阴影，增强层次感 */
-    background: linear-gradient(#5BA68A);  /* 渐变效果 */
+    background-color: #5BA68A;
 }
 
 /* 请求计算框的悬停效果 */
 #calculateBtn:hover {
-    background-color: #388E3C;  /* 悬停时背景颜色稍微加深，明显一点 */
     transform: scale(1.05);  /* 悬停时按钮稍微放大 */
     box-shadow: inset 0vw 0.26vw 0.65vw rgba(0, 0, 0, 0.3),  /* 更强的内阴影效果 */
                 0vw 0.26vw 0.65vw rgba(0, 0, 0, 0.2);  /* 悬停时的外阴影加深 */

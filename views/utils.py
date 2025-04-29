@@ -18,7 +18,7 @@ def token_required(f):
         # 如果没有提供Token
         if not token:
             # 中文编码有问题，只能用英文
-            return jsonify({'message': 'Token missed, please login', 'code': 401})
+            return jsonify({'message': 'Token missed, please login', 'code': 401}), 401
 
         try:
             # 解码JWT
@@ -31,12 +31,12 @@ def token_required(f):
                     'username': decoded['username']
                 }
             else:
-                return jsonify({'message': 'Invalid Token, please login again', 'code': 401})
+                return jsonify({'message': 'Invalid Token, please login again', 'code': 401}), 401
 
         except jwt.ExpiredSignatureError:
-            return jsonify({'message': 'Token expired, please login again', 'code': 401})
+            return jsonify({'message': 'Token expired, please login again', 'code': 401}), 401
         except jwt.InvalidTokenError:
-            return jsonify({'message': 'Invalid Token, please login again', 'code': 401})
+            return jsonify({'message': 'Invalid Token, please login again', 'code': 401}), 401
 
         # 将当前用户信息传递给视图函数
         return f(current_user, *args, **kwargs)

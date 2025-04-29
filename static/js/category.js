@@ -236,7 +236,11 @@ function updatePagination_category() {
     const nextButton = document.getElementById('next-page');
     const pageInfo = document.getElementById('page-info');
 
-    pageInfo.innerHTML = `第 ${currentPage} 页 / 共 ${totalPages} 页`;
+    if (currentPage === 1 && totalPages === 0) {
+        pageInfo.innerHTML = `第 ${0} 页 / 共 ${0} 页`;
+    } else {
+        pageInfo.innerHTML = `第 ${currentPage} 页 / 共 ${totalPages} 页`;
+    }
 
     prevButton.disabled = currentPage <= 1;
     nextButton.disabled = currentPage >= totalPages;
