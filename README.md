@@ -3,7 +3,7 @@
 [![语言](https://img.shields.io/badge/language-Python%20%7C%20JS%20%7C%20HTML%20%7C%20CSS-blue)](https://shields.io/)
 **HomeManager** 是一个基于 Flask 和现代前端技术构建的智能家庭物品管理系统，旨在帮助用户轻松追踪、管理和查找家中的各类物品。系统拥有简洁美观的用户界面和流畅的交互体验。
 
-![HomeManager 主界面](static/images/UI.png)
+![HomeManager 主界面](https://raw.githubusercontent.com/Astrilate/HomeManager/refs/heads/main/static/images/UI.png)
 **系统核心界面截图**
 
 ---
