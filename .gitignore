@@ -1,1 +1,38 @@
-/static/uploads/
+# Python compiled files
+*.pyc
+__pycache__/
+*.pyo
+pip-log.txt
+
+# Virtual environment
+venv/
+.venv/
+env/
+
+# Editor/IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+*.swn
+
+# Operating System files
+.DS_Store
+Thumbs.db
+
+# Log files
+*.log
+
+# Database files (if using local SQLite)
+*.db
+
+# Uploaded files directory
+static/uploads/
+
+# Flask instance directory (if used)
+instance/
+
+# Build artifacts (if packaging)
+dist/
+build/
+*.egg-info/
